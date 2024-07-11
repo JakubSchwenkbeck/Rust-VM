@@ -28,9 +28,6 @@ trait addressable { // interface, if something is adressable it has to ...
 
 }
 
-fn nothin(){
-    println!("nth");
-}
 
 
 
