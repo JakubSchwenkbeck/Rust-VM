@@ -5,29 +5,37 @@
 
 use crate::memory::{LinMem,Addressable};
 
-enum Register{
+pub enum Register{
     A,B,C, M, SP, PC, BP, FLAGS,  // Registers like Stack pointer, programmcounter etc
 } 
 
+pub enum Operations{
+    Nop,
+}
 
 
 pub struct Machine{ 
-     registers: [u16; 8] , // array of our registers
-     memory : Box<dyn Addressable>, // first version of memory Box puts it on the heap instead of stack, might change later
+     pub registers: [u16; 8] , // array of our registers
+     memory : Box<dyn Addressable>,
+     // first version of memory Box puts it on the heap instead of stack, might change later
 }
 
 impl Machine{ // creates a machine
     pub fn new() -> Self { // 
         Self{
             registers:[0;8],
-            memory: Box::new(LinMem::new(8 * 1024)),
+            memory: Box::new(LinMem::new(8 * 1024)), // init mem with 8kb
         }
     }
-    pub fn step(&mut self) { // } -> Result<(),&'static str> { // Return is a enum an catches OK and Err
+
+    pub fn step(&mut self)-> Result<(),&'static str> { // Return is a enum an catches OK and Err
             let pc = self.registers[Register::PC as usize];
             let instruction = self.memory.read2(pc).unwrap();
-            println!("{} @ {}",instruction,pc);
-          //      OK({});
+            self.registers[Register::PC as usize] = pc +2;
+            println!("{} @ {}", instruction, pc);
+            Ok(())
+       
+        
 
 
     }

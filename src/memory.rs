@@ -11,7 +11,7 @@ pub trait Addressable { // interface, if something is adressable it has to ...
 
               return Some( (x0 as u16) | ((x1 as u16) << 8)); // get two 8 bit addresses
             }
-        };
+        }
         None // do nothing 
  
     }
@@ -62,22 +62,22 @@ impl Addressable for LinMem{ // implement read and wirte for linear memory
 
 
     fn read(&self,addr: u16) -> Option<u8>{
-            if (addr as usize) < self.size {
-                 Some( self.bytes[addr as usize] );
-            }
+        if (addr as usize) < self.size {
+            Some(self.bytes[addr as usize])
+        } else {
             None
-
+        }
 
     }
 
 
     fn write(&mut self,addr: u16,value: u8) -> bool{
         if (addr as usize) < self.size {
-                self.bytes[addr as usize] = value;
-              return true;
+            self.bytes[addr as usize] = value;
+            true
+        } else {
+            false
         }
-
-                false
             
 
 

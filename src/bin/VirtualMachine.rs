@@ -2,9 +2,15 @@
 use rust_projects::vm::Machine;
 
 pub fn main()-> Result<(), & 'static str> {
-    let mut vm = Machine::new();
-    vm.step()?;
-    Ok(())
+    let mut virtualm = Machine::new();
+    //println!("reg {}",virtualm.registers[Register::PC]);
+    virtualm.step()?;
+    virtualm.step()?;
+    virtualm.step()?;
+    virtualm.step()
+
+
+ 
 
 
 }
