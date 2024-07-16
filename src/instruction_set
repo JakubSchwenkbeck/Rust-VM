@@ -1,8 +1,0 @@
-pub enum instruction_set{
-
-    Lw, // load Word || Input : <Source : Addr> | Output : words
-    SW, // store word ||input : <Destination : Addr>, <_input : Word> | Output : 
-    add,// Add words ||input : <
-
-
-}
