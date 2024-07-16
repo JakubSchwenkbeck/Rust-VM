@@ -1,8 +1,6 @@
 // Virtual Machine Binary 
-use rust_projects::vm::Machine;
-use rust_projects::instruction_set::*;
-use rust_projects::memory::{LinMem,Addressable};
-use rust_projects::vm::Register;
+use rust_projects::*;
+use rust_projects::instructions_lin_mem::*;
 
 
 pub fn main()-> Result<(), & 'static str> {
@@ -16,9 +14,6 @@ pub fn main()-> Result<(), & 'static str> {
     }
     println!("{disp}");
     virtualm.step()
-
-
- 
 
 
 }
