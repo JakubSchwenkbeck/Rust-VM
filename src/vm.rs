@@ -39,5 +39,4 @@ impl Machine{ // creates a machine
 
 
     }
-
 }
