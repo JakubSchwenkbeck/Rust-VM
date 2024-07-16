@@ -16,7 +16,7 @@ pub enum Operations{
 
 pub struct Machine{ 
      pub registers: [u16; 8] , // array of our registers
-     memory : Box<dyn Addressable>,
+     pub memory : Box<dyn Addressable>,
      // first version of memory Box puts it on the heap instead of stack, might change later
 }
 

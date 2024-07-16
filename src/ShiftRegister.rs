@@ -22,8 +22,8 @@ impl ShiftRegister{
     pub fn step_register(&mut self,_input : bool)-> bool{
 
 
--
-            self.polynoms[0] = _input ;
+
+           // self.polynoms[0] = _input ;
 
 
        true 
