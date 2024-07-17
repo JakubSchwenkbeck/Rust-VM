@@ -28,8 +28,8 @@ use crate::vm::Machine;
 
 
 // --> I - Type 4 bits Opcode, 4 bits adress, 4 bits adress, 4 bits immediate value XXXX-XXXX-XXXX-XXXX
-        // LWI 0000 - XXXX - XXXX - 0000
-        // SWI 0001 - XXXX - XXXX - 0000
+        // LWI 0000 - XXXX - XXXXXXXX
+        // SWI 0001  - XXXXXXXX - XXXX
         // AddI 0010 - XXXX - XXXX - XXXX
         // SubI 0011 - XXXX - XXXX - XXXX
         // AndI 0100 - XXXX - XXXX - XXXX

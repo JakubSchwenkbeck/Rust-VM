@@ -1,4 +1,3 @@
-use std::fmt::Binary;
 
 use instructions_regs::{reg_add, reg_immediate_add, reg_load_word, reg_print, reg_store_word, reg_jump};
 // Virtual Machine Binary 
