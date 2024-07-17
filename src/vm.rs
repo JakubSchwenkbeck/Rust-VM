@@ -6,7 +6,7 @@
 use crate::memory::{LinMem,Addressable};
 
 pub enum Register{
-    Arg1,Arg2,Val1, Val2,Temp1, Temp2,Temp3,Temp4, SP, PC, BP, FLAGS,  // Registers like Stack pointer, programmcounter etc
+   A,B,C,D, Arg1,Arg2,Val1, Val2,Temp1, Temp2,Temp3,Temp4, SP, PC, BP, FLAGS,  // Registers like Stack pointer, programmcounter etc
 } 
 
 pub enum Operations{
@@ -15,7 +15,7 @@ pub enum Operations{
 
 
 pub struct Machine{ 
-     pub registers: [u16; 12] , // array of our registers
+     pub registers: [u16; 16] , // array of our registers
      pub memory : Box<dyn Addressable>,
      // first version of memory Box puts it on the heap instead of stack, might change later
 }
@@ -23,7 +23,7 @@ pub struct Machine{
 impl Machine{ // creates a machine
     pub fn new() -> Self { // 
         Self{
-            registers:[0;12],
+            registers:[0;16],
             memory: Box::new(LinMem::new(8 * 1024)), // init mem with 8kb
         }
     }

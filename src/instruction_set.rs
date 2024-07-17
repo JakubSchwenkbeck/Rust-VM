@@ -41,5 +41,6 @@ pub enum InstructionSet{
     ShiftLeft, // shift (amount) || <Destination>, <Source :Addr>, <ShiftAmount : Word>
     ShiftRight, // shift (amount) || <Destination>, <Source :Addr>, <ShiftAmount : Word>
 
+    Not, // ??    
     
 }
