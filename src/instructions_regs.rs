@@ -1,4 +1,6 @@
 
+
+use crate::Register;
 use crate::u4::U4;
 
 use crate::vm::Machine;
@@ -96,7 +98,7 @@ pub fn reg_print(mach: &mut Machine, dest: U4){
             }
             pub fn reg_branch_not_equal( mach :&mut Machine ,comp1: U4,comp2 : U4, dest: U4){
                 if mach.registers[comp1] != mach.registers[comp2]{
-                        reg_jump(mach, dest);
+                        reg_jump(mach, dest.0 , U4::new(0));
                 }
 
             }
@@ -114,28 +116,33 @@ pub fn reg_print(mach: &mut Machine, dest: U4){
 
 
             // I- FORMAT
-            pub fn reg_immediate_load_word(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
+            pub fn reg_immediate_load_word(mach :&mut Machine ,dest: U4,_input :  u8){
+                        mach.registers[dest] = _input as u16;
+
 
             }
-            pub fn reg_immediate_store_word(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
+            pub fn reg_immediate_store_word(mach :&mut Machine ,dest: u8 ,_input : U4  ){
+                        mach.memory.write(dest as u16, _input.0);
                 
             }
             pub fn reg_immediate_add(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
-                
+                mach.registers[dest] = mach.registers[source] + _input.0 as u16;
+
             }
             pub fn reg_immediate_sub(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
-                
+                mach.registers[dest] = mach.registers[source] - _input.0 as u16;
+
             }
             pub fn reg_immediate_and(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
-                
+                mach.registers[dest] = mach.registers[source] & _input.0 as u16;
+
             }
             pub fn reg_immediate_or(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
+                mach.registers[dest] = mach.registers[source] | _input.0 as u16;
 
             }
 
-
-            
             // J - FORMAT
-            pub fn reg_jump(mach :&mut Machine ,dest: U4){
-
+            pub fn reg_jump(mach :&mut Machine ,dest: u8, offset : U4){
+                mach.registers[Register::PC as usize] = ( dest *  (offset.0  +1)) as u16;
             }

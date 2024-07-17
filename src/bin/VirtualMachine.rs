@@ -1,6 +1,6 @@
 use std::fmt::Binary;
 
-use instructions_regs::{reg_add, reg_load_word, reg_print, reg_store_word};
+use instructions_regs::{reg_add, reg_immediate_add, reg_load_word, reg_print, reg_store_word, reg_jump};
 // Virtual Machine Binary 
 use rust_projects::*;
 use rust_projects::instructions_lin_mem::*;
@@ -31,6 +31,16 @@ pub fn main()-> Result<(), & 'static str> {
 
     let val =virtualm.memory.read(2).unwrap();
     println!("Value in Addr 2   :{val}");
+    virtualm.step()?;
+
+    reg_immediate_add(&mut virtualm, U4::new(3), U4::new(3), U4::new(7));
+    reg_print(&mut virtualm, U4::new(2));
+    virtualm.step()?;
+
+    reg_jump(&mut virtualm,11, U4::new(3) );
+    virtualm.step()?;
+
+    reg_jump(&mut virtualm,12, U4::new(0) );
     virtualm.step()
 
 
