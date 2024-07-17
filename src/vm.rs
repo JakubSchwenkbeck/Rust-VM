@@ -33,7 +33,9 @@ impl Machine{ // creates a machine
             let instruction = self.memory.read2(pc ).unwrap();
             self.registers[Register::PC as usize] = pc +2;
             println!("{} @ {}", instruction, pc);
+          
             Ok(())
+         
        
         
 

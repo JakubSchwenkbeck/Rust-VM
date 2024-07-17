@@ -1,6 +1,4 @@
 
-use crate::memory::{LinMem,Addressable};
-use crate::vm::Register;
 use crate::u4::U4;
 
 use crate::vm::Machine;
@@ -39,45 +37,81 @@ use crate::vm::Machine;
             //jump 1111 - XXXX - 0000 - 0000
         
 
+//* Util */
+pub fn reg_print(mach: &mut Machine, dest: U4){
+        let v = mach.registers[dest];
+        println!("in Reg : {v}");
+        let binstring =format!("{:b}", v);
+        println!("As binary: {binstring}");
+    
+}
+
+
 
             //* IMPLEMENTATION FOR REGISTERS *//
 
                 // R - FORMAT
             pub fn reg_load_word( mach :&mut Machine ,dest: U4,source : u16){
-                        let val  = mach.memory.read(source);
-                        let mut op = 0;
-                        if val.is_some(){
-                                op = val.unwrap();
-                        }
-                        mach.registers[dest] = op as u16;
+                let val  = mach.memory.read(source);
+                let mut op = 0;
+                if val.is_some(){
+                        op = val.unwrap();
+                }
+                mach.registers[dest] = op as u16;
 
                         
             }
             pub fn reg_store_word( mach :&mut Machine ,dest:u16 ,source : U4){
-                                mach.memory.write(dest, mach.registers[source] as u8);
+                mach.memory.write(dest, mach.registers[source] as u8);
+
+            }
+            pub fn reg_add( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){
+                let val1 = mach.registers[source1];
+                let val2 = mach.registers[source2];
+                let sum = val1 +val2;
+                mach.registers[dest] = sum;
+
                 
             }
-            pub fn reg_add_word( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){
-                
+            pub fn reg_sub( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){
+                let val1 = mach.registers[source1];
+                let val2 = mach.registers[source2];
+                let sum = val1 -val2;
+                mach.registers[dest] = sum;
+
             }
-            pub fn reg_sub_word( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){
-                
+            pub fn reg_and( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){
+                let val1 = mach.registers[source1];
+                let val2 = mach.registers[source2];
+                let sum = val1 & val2;
+                mach.registers[dest] = sum;
+
             }
-            pub fn reg_and_word( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){
-                
-            }
-            pub fn reg_or_word( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){
-                
+            pub fn reg_or( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){
+                let val1 = mach.registers[source1];
+                let val2 = mach.registers[source2];
+                let sum = val1 | val2;
+                mach.registers[dest] = sum;
+
             }
             pub fn reg_branch_not_equal( mach :&mut Machine ,comp1: U4,comp2 : U4, dest: U4){
+                if mach.registers[comp1] != mach.registers[comp2]{
+                        reg_jump(mach, dest);
+                }
 
             }
             pub fn reg_shift_left( mach :&mut Machine ,dest: U4,source : U4, shift_amount : U4){
-
+                let mut val = mach.registers[source];
+                val = val << (shift_amount.0 as u16) ;
+                mach.registers[dest] = val;
             }
             pub fn reg_shift_right( mach :&mut Machine ,dest: U4,source : U4,shift_amount : U4){
-                
+                let mut val = mach.registers[source];
+                val = val >> (shift_amount.0 as u16) ;
+                mach.registers[dest] = val;
             }
+
+
 
             // I- FORMAT
             pub fn reg_immediate_load_word(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
@@ -86,18 +120,20 @@ use crate::vm::Machine;
             pub fn reg_immediate_store_word(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
                 
             }
-            pub fn reg_immediate_add_word(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
+            pub fn reg_immediate_add(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
                 
             }
-            pub fn reg_immediate_sub_word(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
+            pub fn reg_immediate_sub(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
                 
             }
-            pub fn reg_immediate_and_word(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
+            pub fn reg_immediate_and(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
                 
             }
-            pub fn reg_immediate_or_word(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
+            pub fn reg_immediate_or(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
 
             }
+
+
             
             // J - FORMAT
             pub fn reg_jump(mach :&mut Machine ,dest: U4){

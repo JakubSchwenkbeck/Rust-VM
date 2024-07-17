@@ -1,10 +1,3 @@
-
-use crate::memory::{LinMem,Addressable};
-use crate::vm::Register;
-
-use crate::vm::Machine;
-
-
 //* The instruction Set contains 17 Instructions which are used for simulating a Processor level control */
 //* Is implemented for Registers (as in a CPU) and directly for Linear Memory to give hardware near control in VM using own code */
 
@@ -41,6 +34,5 @@ pub enum InstructionSet{
     ShiftLeft, // shift (amount) || <Destination>, <Source :Addr>, <ShiftAmount : Word>
     ShiftRight, // shift (amount) || <Destination>, <Source :Addr>, <ShiftAmount : Word>
 
-    Not, // ??    
-    
+
 }

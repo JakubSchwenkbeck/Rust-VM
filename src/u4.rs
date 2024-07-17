@@ -1,9 +1,12 @@
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
-pub struct U4(u8);
+pub struct U4(pub u8);
 
 impl U4 {
-    fn new(value: u8) -> Self {
-        U4(value & 0x0F)  // Mask to ensure value is only 4 bits
+   pub fn new(value: u8) -> Self {
+         U4(value & 0x0F)  // Mask to ensure value is only 4 bits
+    }
+    pub fn to_binary_string(&self) -> String {
+        format!("{:04b}", self.0)  // Format to 4-bit binary string
     }
 }
 
@@ -44,3 +47,24 @@ impl IndexMut<U4> for [u16; 16] {
         &mut self[index.0 as usize]
     }
 }
+use std::ops::{Shl, Shr};
+
+// Implement the shift left operation
+impl Shl<u8> for U4 {
+    type Output = U4;
+
+    fn shl(self, rhs: u8) -> U4 {
+        U4::new((self.0 << rhs) & 0x0F)  // Shift left and mask to 4 bits
+    }
+}
+
+// Implement the shift right operation
+impl Shr<u8> for U4 {
+    type Output = U4;
+
+    fn shr(self, rhs: u8) -> U4 {
+        U4::new((self.0 >> rhs) & 0x0F)  // Shift right and mask to 4 bits
+    }
+}
+
+
