@@ -30,7 +30,7 @@ impl Machine{ // creates a machine
 
     pub fn step(&mut self)-> Result<(),&'static str> { // Return is a enum an catches OK and Err
             let pc = self.registers[Register::PC as usize];
-            let instruction = self.memory.read2(pc).unwrap();
+            let instruction = self.memory.read2(pc ).unwrap();
             self.registers[Register::PC as usize] = pc +2;
             println!("{} @ {}", instruction, pc);
             Ok(())
