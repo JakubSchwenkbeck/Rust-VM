@@ -16,13 +16,16 @@ pub fn decode(word: u16,mach : &mut Machine)  {
             
             let rd = ((word >> 8) & 0xF) as u8;       // Extract the destination register (next 4 bits)
             let val = (word & 0xFF) as u8;
+            
 
           reg_immediate_load_word(mach,U4::new(rd),val);
         },
         0b0001 => { // SWI
-            let val = ((word >> 8) & 0xF) as u8;       // Extract the destination register (next 4 bits)
-            let dest = (word & 0xFF) as u8;
-            reg_immediate_store_word(mach, dest, U4::new(val));
+            let dest = ((word >>4 ) & 0xFF) as u8;    
+            
+               // Extract the destination register (next 4 bits)
+            let val =  U4::new((word & 0x0F) as u8);
+            reg_immediate_store_word(mach, dest, val);
         },
         0b0010 => { //ADD I
             let rd = U4::new(((word >> 8) & 0xF) as u8);
@@ -60,18 +63,21 @@ pub fn decode(word: u16,mach : &mut Machine)  {
         // R- Format:
 
         0b0110 => {
-            // LOAD Word
             let rd: U4 = U4::new(((word >> 8) & 0xF) as u8);
-            let source: u16 = word>> 4 as u16;
+            let source: u8 =  (word  & 0x00FF) as u8  ;
+            
             reg_load_word(mach, rd, source);
+
 
         },
         
         0b0111 => { 
             // Store Word
             let rd: U4 = U4::new(((word >> 8) & 0xF) as u8);
-            let source: u16 = word>> 4 as u16;
+            let source: u8 =  (word  & 0x00FF) as u8  ;
+            
             reg_store_word(mach,  rd,source);
+
 
           
         },
@@ -112,7 +118,7 @@ pub fn decode(word: u16,mach : &mut Machine)  {
             let rs = U4::new(((word >> 4) & 0xF) as u8);
             let rt = U4::new((word & 0xF) as u8);
           
-            reg_branch_not_equal(mach, rt, rs, rd);
+            reg_branch_not_equal(mach, rd, rs, rt);
            
         },
         0b1101 => {
@@ -135,10 +141,9 @@ pub fn decode(word: u16,mach : &mut Machine)  {
         // JUMP :
         0b1111 => {
 
-            let rd =  ((word & 0x0FF0) >>4 )as u8;
-         
-           let offset =  U4::new(((word & 0x0FF0) >>12 ) as u8);
-
+            let rd =  ((word >>4 ) & 0xFF) as u8;
+            println!("rd : {rd}");
+             let offset =  U4::new((word & 0x0F) as u8);
             reg_jump(mach, rd, offset);
            
         },

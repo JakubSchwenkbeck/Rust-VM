@@ -25,10 +25,11 @@ pub fn main()-> Result<(), & 'static str> {
         parse_line(&line, &mut virtualm);
         reg_printall(&mut virtualm);    
         virtualm.step()?;
-
     }
 
-    
+
+        let val = virtualm.memory.read(18).unwrap();
+        println!("Memory space 18 : {val}");
 
 
     virtualm.step()

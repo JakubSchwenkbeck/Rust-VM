@@ -73,8 +73,8 @@ pub fn reg_printall(mach: &mut Machine){
             //* IMPLEMENTATION FOR REGISTERS *//
 
                 // R - FORMAT
-            pub fn reg_load_word( mach :&mut Machine ,dest: U4,source : u16){
-                let val  = mach.memory.read(source);
+            pub fn reg_load_word( mach :&mut Machine ,dest: U4,source : u8){
+                let val  = mach.memory.read(source as u16);
                 let mut op = 0;
                 if val.is_some(){
                         op = val.unwrap();
@@ -83,8 +83,8 @@ pub fn reg_printall(mach: &mut Machine){
 
                         
             }
-            pub fn reg_store_word( mach :&mut Machine  ,source : U4,dest : u16){
-                mach.memory.write(dest, mach.registers[source] as u8);
+            pub fn reg_store_word( mach :&mut Machine  ,source : U4,dest : u8){
+                mach.memory.write(dest as u16, mach.registers[source] as u8);
 
             }
             pub fn reg_add( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){

@@ -36,13 +36,17 @@ pub fn parse_line(line: &str,mach : &mut Machine){
     let parts: Vec<&str> = line.split_whitespace().collect();
     match parts.as_slice() {
         ["jump", addr, offset] => {
-            let dst1 = addr.parse::<u8>().unwrap()  ;
-            let dst2 = addr.parse::<u8>().unwrap();
-            
+            let dst = addr.parse::<u8>().unwrap()  ;
+
+            let dst1 = dst >> 4;
+            let dst2 = dst & 0x0F;
+           
             let off =  offset.parse::<u8>().unwrap();
 
            let word = concatenate_4bit_values(0b1111, dst1,dst2, off);
-            decode(word, mach)
+            
+            decode(word, mach);
+
          
         },
 
@@ -88,22 +92,23 @@ pub fn parse_line(line: &str,mach : &mut Machine){
             decode(word, mach)
          
         },
-        ["sw", dst, src1] => {
-            let dst = dst.parse::<u8>().unwrap();
-            let src =  src1.parse::<u16>().unwrap();
-            let src1 = (src >> 8) as u8; 
-            let src2 = (src & 0xFF) as u8;
-          
-           let word = concatenate_4bit_values(0b0110, dst, src1,src2);
+        ["sw", src, dst] => {
+            let src = src.parse::<u8>().unwrap();
+            let dst =  dst.parse::<u8>().unwrap();
+            let dst1 = (dst >> 4) as u8; 
+            let dst2 = (dst & 0x0F) as u8;
+           let word = concatenate_4bit_values(0b0111, src, dst1,dst2);
+           let bin = format!("{:016b}", word);
+           println!("Im saving : {word}, {bin}");
             decode(word, mach)
          
          
         },
         ["lw", dst,  src1] => {
             let dst = dst.parse::<u8>().unwrap();
-            let src =  src1.parse::<u16>().unwrap();
-            let src1 = (src >> 8) as u8; 
-            let src2 = (src & 0xFF) as u8;
+            let src =  src1.parse::<u8>().unwrap();
+            let src1 = (src >> 4) as u8; 
+            let src2 = (src & 0x0F) as u8;
           
            let word = concatenate_4bit_values(0b0110, dst, src1,src2);
             decode(word, mach)
@@ -113,9 +118,9 @@ pub fn parse_line(line: &str,mach : &mut Machine){
 
             let dst = dest.parse::<u8>().unwrap();
             let comp1 =  src1.parse::<u8>().unwrap();
-            let cmop2 =  src2.parse::<u8>().unwrap();
+            let comp2 =  src2.parse::<u8>().unwrap();
 
-           let word = concatenate_4bit_values(0b1100, comp1, cmop2,dst);
+           let word = concatenate_4bit_values(0b1100, comp1, comp2,dst);
            let bin = format!("{:016b}", word);
            println!("Im checking branch  : {word}, {bin}");
             decode(word, mach)
@@ -150,18 +155,24 @@ pub fn parse_line(line: &str,mach : &mut Machine){
                 let dst = dst.parse::<u8>().unwrap();
                
                 let imm =  imm.parse::<u8>().unwrap();
+
+                let imm1 = imm >> 4;
+                let imm2 = imm & 0x0F;
+            
     
-               let word = concatenate_4bit_values(0b0010, dst,imm,0b000);
+               let word = concatenate_4bit_values(0b0010, dst,imm1,imm2);
                let bin = format!("{:016b}", word);
-               println!("Im laoding immediate : {word}, {bin}");
+               println!("Im loading immediate : {word}, {bin}");
                 decode(word, mach)
              
-            }, ["swi", dst, imm] => {
+            }, ["swi", dst, imm] => {  
                 let dst = dst.parse::<u8>().unwrap();
-                
+                let dst1 = dst >> 4;
+                let dst2 = dst & 0x0F;
                 let imm =  imm.parse::<u8>().unwrap();
-    
-               let word = concatenate_4bit_values(0b0010, dst,imm, 0b000);
+                
+            
+               let word = concatenate_4bit_values(0b0001, dst1,dst2, imm);
                let bin = format!("{:016b}", word);
                println!("Im storing immediate : {word}, {bin}");
                 decode(word, mach)
@@ -216,7 +227,7 @@ pub fn parse_line(line: &str,mach : &mut Machine){
 
        
        
-        _ => println!("Error"),
+        _ => println!("Finished Reading"),
 
 
     }
