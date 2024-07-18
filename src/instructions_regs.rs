@@ -49,11 +49,17 @@ pub fn reg_single_print(mach: &mut Machine, dest: U4){
 }
 
 pub fn reg_printall(mach: &mut Machine){
+    println!("");
+    println!("");
+    println!("-----All Registers-------");
+    
     for index in 0..16 {
        let val = mach.registers[index];
        println!("Register {index} = {val}");
         
     }
+    println!("");
+    println!("");
 
 }
 
@@ -90,6 +96,7 @@ pub fn reg_printall(mach: &mut Machine){
                 let val2 = mach.registers[source2];
                 let sum = val1 -val2;
                 mach.registers[dest] = sum;
+                println!("Im Writing {sum} into reg at {dest}");
 
             }
             pub fn reg_and( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){

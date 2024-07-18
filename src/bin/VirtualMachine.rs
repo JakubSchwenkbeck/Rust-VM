@@ -14,6 +14,8 @@ pub fn main()-> Result<(), & 'static str> {
     virtualm.step()?;
     reg_immediate_add(&mut virtualm, U4::new(2), U4::new(2), U4::new(7));
     virtualm.step()?;
+    reg_printall(&mut virtualm);
+
     println!("--------------------------------------");
 
     let lines =read_lines_from_file("Assembly.txt").unwrap();

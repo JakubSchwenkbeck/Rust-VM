@@ -48,6 +48,10 @@ pub fn parse_line(line: &str,mach : &mut Machine){
             let src2 =  src2.parse::<u8>().unwrap();
 
            let word = concatenate_4bit_values(0b1001, dst, src1,src2);
+          
+
+            let bin = format!("{:016b}", word);
+            println!("Im subbing : {word}, {bin}");
             decode(word, mach)
          
         },

@@ -85,7 +85,7 @@ pub fn decode(word: u16,mach : &mut Machine)  {
             let rd = U4::new(((word >> 8) & 0xF) as u8);
             let rs = U4::new(((word >> 4) & 0xF) as u8);
             let rt = U4::new((word & 0xF) as u8);
-          
+            println!("Im Decoding Sub {rd},{rs},{rt}");
             reg_sub(mach, rd, rs, rt);
            
         },
