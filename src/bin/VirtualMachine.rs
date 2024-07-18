@@ -1,8 +1,10 @@
 
 
 
-use assembler::{parse_line, read_lines_from_file};
-use instructions_regs::{ reg_immediate_add, reg_printall};
+
+use instructions::instructions_regs;
+use instructions_regs::*;
+use interpreter::assembler::*;
 // Virtual Machine Binary 
 use rust_projects::*;
 use rust_projects::u4::U4;

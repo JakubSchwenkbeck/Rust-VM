@@ -1,5 +1,7 @@
 
-use crate::{instructions_regs::*, u4::U4, Machine};
+use instructions_regs::*;
+
+use crate::{instructions::*, u4::U4, Machine};
 //* Interpreter for Assembler Level Register ISA */
 // DECODE ON BINARY LEVEL
 

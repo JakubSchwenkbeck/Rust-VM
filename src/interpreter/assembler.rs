@@ -1,6 +1,10 @@
-use crate::{decoder::decode, Machine};
+
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
+
+use crate::Machine;
+
+use super::decoder::decode;
 
 
 pub fn concatenate_4bit_values(a: u8, b: u8, c: u8, d: u8) -> u16 {
