@@ -40,12 +40,21 @@ use crate::vm::Machine;
         
 
 //* Util */
-pub fn reg_print(mach: &mut Machine, dest: U4){
+pub fn reg_single_print(mach: &mut Machine, dest: U4){
         let v = mach.registers[dest];
         println!("in Reg : {v}");
         let binstring =format!("{:b}", v);
         println!("As binary: {binstring}");
     
+}
+
+pub fn reg_printall(mach: &mut Machine){
+    for index in 0..16 {
+       let val = mach.registers[index];
+       println!("Register {index} = {val}");
+        
+    }
+
 }
 
 
@@ -63,7 +72,7 @@ pub fn reg_print(mach: &mut Machine, dest: U4){
 
                         
             }
-            pub fn reg_store_word( mach :&mut Machine ,dest:u16 ,source : U4){
+            pub fn reg_store_word( mach :&mut Machine  ,source : U4,dest : u16){
                 mach.memory.write(dest, mach.registers[source] as u8);
 
             }
@@ -72,6 +81,7 @@ pub fn reg_print(mach: &mut Machine, dest: U4){
                 let val2 = mach.registers[source2];
                 let sum = val1 +val2;
                 mach.registers[dest] = sum;
+                println!("Im Writing {sum} into reg at {dest}");
 
                 
             }
@@ -87,6 +97,7 @@ pub fn reg_print(mach: &mut Machine, dest: U4){
                 let val2 = mach.registers[source2];
                 let sum = val1 & val2;
                 mach.registers[dest] = sum;
+               
 
             }
             pub fn reg_or( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){
