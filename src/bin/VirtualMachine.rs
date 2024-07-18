@@ -48,7 +48,12 @@ pub fn main()-> Result<(), & 'static str> {
     let bin = 0b0000010000000111;
     decode(bin,&mut virtualm );
     reg_print(&mut virtualm, U4::new(4));
-    virtualm.step()
+    virtualm.step()?;
 
+
+    println!("Trying the Jump instruction");
+    let jbin = 0b1111000010000000;
+    decode(jbin,&mut virtualm);
+    virtualm.step()
 
 }
