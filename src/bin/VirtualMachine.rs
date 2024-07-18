@@ -15,13 +15,7 @@ use rust_projects::u4::U4;
 
 pub fn main()-> Result<(), & 'static str> {
     let mut virtualm = Machine::new();
-    reg_printall(&mut virtualm);
-    reg_immediate_add(&mut virtualm, U4::new(1), U4::new(1), U4::new(5));
-    reg_immediate_add(&mut virtualm, U4::new(2), U4::new(2), U4::new(7));
-    virtualm.step()?;
-    reg_printall(&mut virtualm);
-
-
+  
     println!("--------------------------------------");
     parse_programm(&mut virtualm);
 
@@ -51,10 +45,14 @@ pub fn run_programm(virtualm :&mut Machine){
   
         let mut l = virtualm.memory.read2(0 as u16).unwrap();
         while l != 0 {
-             l = virtualm.memory.read2(  virtualm.registers[13]as u16).unwrap();
             decode(l, virtualm);
            
-            virtualm.registers[13] += 1; 
+            virtualm.registers[13] += 2; 
+             
+             l = virtualm.memory.read2(  virtualm.registers[13]as u16).unwrap();
+             println!("{l}");
+             let _ =  virtualm.step();
+             reg_printall( virtualm);
 
         }
 
@@ -74,7 +72,7 @@ pub fn parse_programm(virtualm :&mut Machine){
 
         virtualm.memory.write2(index,val );
 
-            index += 1;
+            index += 2;
 
     }   
 

@@ -225,15 +225,7 @@ pub fn parse_line(line: &str,mach :  &mut Machine) -> u16{
             return word;
          
         },
-        ["lbl", label] => {
-
-            let word = concatenate_4bit_values(0b000, 0b000, 0b0000, mach.registers[13] as u8);
-            
-            return word;
-        }
-    
-
-        
+              
 
        
        

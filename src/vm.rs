@@ -105,7 +105,8 @@ impl Machine{ // creates a machine
             self.registers[Register::PC as usize] = pc +2; */
             let pc = self.registers[Register::PC as usize];
             let instruction = self.memory.read2(pc ).unwrap();
-            println!("{} @ {}", instruction, pc);
+            let bin = format!("{:016b}", instruction);
+            println!("{} @ {}", bin, pc);
           
             Ok(())
          

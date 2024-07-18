@@ -10,10 +10,7 @@ use std::collections::HashMap;
 pub fn decode(word: u16,mach : &mut Machine)  {
     let opcode = (word >> 12) as u8 ;  // Extract the opcode (first 4 bits)
     if word!= 32727{
-        if (word>>4) == 0b0000_0000_0000  {
-            mach.registers[13] = word  & 0x000F;
-
-        }else{
+        
     match opcode {
 
         // I - FORMAT 
@@ -148,7 +145,6 @@ pub fn decode(word: u16,mach : &mut Machine)  {
         0b1111 => {
 
             let rd =  ((word >>4 ) & 0xFF) as u8;
-            println!("rd : {rd}");
              let offset =  U4::new((word & 0x0F) as u8);
             reg_jump(mach, rd, offset);
            
@@ -158,6 +154,5 @@ pub fn decode(word: u16,mach : &mut Machine)  {
         
         _ => {let _ = mach.step();}
     }
-}
 }
 }
