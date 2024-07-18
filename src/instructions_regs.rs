@@ -47,17 +47,22 @@ pub fn reg_single_print(mach: &mut Machine, dest: U4){
         println!("As binary: {binstring}");
     
 }
+use crate::vm::EnumIter;
 
 pub fn reg_printall(mach: &mut Machine){
     println!("");
     println!("");
     println!("-----All Registers-------");
     
-    for index in 0..16 {
+   
+        for (index, reg) in Register::iter().enumerate() {
+           
        let val = mach.registers[index];
-       println!("Register {index} = {val}");
         
-    }
+       println!(" {:?}: = {}",reg,val);
+        }
+
+    println!("--------------------------");
     println!("");
     println!("");
 
@@ -94,7 +99,11 @@ pub fn reg_printall(mach: &mut Machine){
             pub fn reg_sub( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){
                 let val1 = mach.registers[source1];
                 let val2 = mach.registers[source2];
-                let sum = val1 -val2;
+                let mut sum = u16::MAX;
+                if val1 > val2{
+                 sum = val1 -val2;
+                }
+                
                 mach.registers[dest] = sum;
                 println!("Im Writing {sum} into reg at {dest}");
 
@@ -117,6 +126,8 @@ pub fn reg_printall(mach: &mut Machine){
             pub fn reg_branch_not_equal( mach :&mut Machine ,comp1: U4,comp2 : U4, dest: U4){
                 if mach.registers[comp1] != mach.registers[comp2]{
                         reg_jump(mach, dest.0 , U4::new(0));
+                        let d = dest.0;
+                        println!("Im branching to {d}")
                 }
 
             }
@@ -148,8 +159,13 @@ pub fn reg_printall(mach: &mut Machine){
 
             }
             pub fn reg_immediate_sub(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
-                mach.registers[dest] = mach.registers[source] - _input.0 as u16;
+                if mach.registers[source] > _input.0 as u16{
+                mach.registers[dest] = mach.registers[source] - _input.0 as u16;}
+                else {
 
+                mach.registers[dest] =u16::MAX;
+
+                }
             }
             pub fn reg_immediate_and(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
                 mach.registers[dest] = mach.registers[source] & _input.0 as u16;

@@ -31,6 +31,17 @@ pub fn read_lines_from_file(filename: &str) -> io::Result<Vec<String>> {
 pub fn parse_line(line: &str,mach : &mut Machine){
     let parts: Vec<&str> = line.split_whitespace().collect();
     match parts.as_slice() {
+        ["jump", addr, offset] => {
+            let dst1 = addr.parse::<u8>().unwrap()  ;
+            let dst2 = addr.parse::<u8>().unwrap();
+            
+            let off =  offset.parse::<u8>().unwrap();
+
+           let word = concatenate_4bit_values(0b1111, dst1,dst2, off);
+            decode(word, mach)
+         
+        },
+
         ["add", dst, src1, src2] => {
             let dst = dst.parse::<u8>().unwrap();
             let src1 =  src1.parse::<u8>().unwrap();
@@ -94,6 +105,111 @@ pub fn parse_line(line: &str,mach : &mut Machine){
             decode(word, mach)
          
         },
+        ["bne", src1, src2,dest] => {
+
+            let dst = dest.parse::<u8>().unwrap();
+            let comp1 =  src1.parse::<u8>().unwrap();
+            let cmop2 =  src2.parse::<u8>().unwrap();
+
+           let word = concatenate_4bit_values(0b1100, comp1, cmop2,dst);
+           let bin = format!("{:016b}", word);
+           println!("Im checking branch  : {word}, {bin}");
+            decode(word, mach)
+         
+        },
+        ["sl", dst, src1, src2] => {
+            let dst = dst.parse::<u8>().unwrap();
+            let src1 =  src1.parse::<u8>().unwrap();
+            let src2 =  src2.parse::<u8>().unwrap();
+
+           let word = concatenate_4bit_values(0b1101, dst, src1,src2);
+           let bin = format!("{:016b}", word);
+           println!("Im shifting left : {word}, {bin}");
+            decode(word, mach)
+         
+        },
+        ["sr", dst, src1, src2] => {
+            let dst = dst.parse::<u8>().unwrap();
+            let src1 =  src1.parse::<u8>().unwrap();
+            let src2 =  src2.parse::<u8>().unwrap();
+
+           let word = concatenate_4bit_values(0b1110, dst, src1,src2);
+           let bin = format!("{:016b}", word);
+           println!("Im shifting right : {word}, {bin}");
+            decode(word, mach)
+         
+        },
+
+            // I Format
+
+        ["lwi", dst, imm] => {
+                let dst = dst.parse::<u8>().unwrap();
+               
+                let imm =  imm.parse::<u8>().unwrap();
+    
+               let word = concatenate_4bit_values(0b0010, dst,imm,0b000);
+               let bin = format!("{:016b}", word);
+               println!("Im laoding immediate : {word}, {bin}");
+                decode(word, mach)
+             
+            }, ["swi", dst, imm] => {
+                let dst = dst.parse::<u8>().unwrap();
+                
+                let imm =  imm.parse::<u8>().unwrap();
+    
+               let word = concatenate_4bit_values(0b0010, dst,imm, 0b000);
+               let bin = format!("{:016b}", word);
+               println!("Im storing immediate : {word}, {bin}");
+                decode(word, mach)
+             
+            },
+
+
+        ["addi", dst, src1, imm] => {
+            let dst = dst.parse::<u8>().unwrap();
+            let src1 =  src1.parse::<u8>().unwrap();
+            let imm =  imm.parse::<u8>().unwrap();
+
+           let word = concatenate_4bit_values(0b0010, dst, src1,imm);
+           let bin = format!("{:016b}", word);
+           println!("Im adding immediate : {word}, {bin}");
+            decode(word, mach)
+         
+        },
+        ["subi", dst, src1, imm] => {
+            let dst = dst.parse::<u8>().unwrap();
+            let src1 =  src1.parse::<u8>().unwrap();
+            let imm: u8 =  imm.parse::<u8>().unwrap();
+
+           let word = concatenate_4bit_values(0b0011, dst, src1,imm);
+           let bin = format!("{:016b}", word);
+           println!("Im subing immediate : {word}, {bin}");
+            decode(word, mach)
+         
+        },
+        ["andi", dst, src1, imm] => {
+            let dst = dst.parse::<u8>().unwrap();
+            let src1 =  src1.parse::<u8>().unwrap();
+            let imm: u8 =  imm.parse::<u8>().unwrap();
+
+           let word = concatenate_4bit_values(0b0100, dst, src1,imm);
+           let bin = format!("{:016b}", word);
+           println!("Im and-ing immediate : {word}, {bin}");
+            decode(word, mach)
+         
+        },
+        ["ori", dst, src1, imm] => {
+            let dst = dst.parse::<u8>().unwrap();
+            let src1 =  src1.parse::<u8>().unwrap();
+            let imm: u8 =  imm.parse::<u8>().unwrap();
+
+           let word = concatenate_4bit_values(0b0101, dst, src1,imm);
+           let bin = format!("{:016b}", word);
+           println!("Im or-ing immediate : {word}, {bin}");
+            decode(word, mach)
+         
+        },
+
        
        
         _ => println!("Error"),
