@@ -4,10 +4,16 @@ use instructions_regs::*;
 use crate::{instructions::*, u4::U4, Machine};
 //* Interpreter for Assembler Level Register ISA */
 // DECODE ON BINARY LEVEL
+use std::collections::HashMap;
+
 
 pub fn decode(word: u16,mach : &mut Machine)  {
     let opcode = (word >> 12) as u8 ;  // Extract the opcode (first 4 bits)
-    
+    if word!= 32727{
+        if (word>>4) == 0b0000_0000_0000  {
+            mach.registers[13] = word  & 0x000F;
+
+        }else{
     match opcode {
 
         // I - FORMAT 
@@ -152,4 +158,6 @@ pub fn decode(word: u16,mach : &mut Machine)  {
         
         _ => {let _ = mach.step();}
     }
+}
+}
 }

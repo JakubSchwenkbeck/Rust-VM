@@ -32,7 +32,7 @@ pub fn read_lines_from_file(filename: &str) -> io::Result<Vec<String>> {
 
 
 
-pub fn parse_line(line: &str,mach : &mut Machine){
+pub fn parse_line(line: &str,mach :  &mut Machine) -> u16{
     let parts: Vec<&str> = line.split_whitespace().collect();
     match parts.as_slice() {
         ["jump", addr, offset] => {
@@ -45,8 +45,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
 
            let word = concatenate_4bit_values(0b1111, dst1,dst2, off);
             
-            decode(word, mach);
-
+            //decode(word, mach);
+            return word;
          
         },
 
@@ -58,8 +58,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
            let word = concatenate_4bit_values(0b1000, dst, src1,src2);
            let bin = format!("{:016b}", word);
            println!("Im adding : {word}, {bin}");
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
         },
         ["sub", dst, src1, src2] => {
             let dst = dst.parse::<u8>().unwrap();
@@ -71,8 +71,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
 
             let bin = format!("{:016b}", word);
             println!("Im subbing : {word}, {bin}");
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
         },
         ["and", dst, src1, src2] => {
             let dst = dst.parse::<u8>().unwrap();
@@ -80,8 +80,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
             let src2 =  src2.parse::<u8>().unwrap();
 
            let word = concatenate_4bit_values(0b1010, dst, src1,src2);
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
         },
         ["or", dst, src1, src2] => {
             let dst = dst.parse::<u8>().unwrap();
@@ -89,8 +89,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
             let src2 =  src2.parse::<u8>().unwrap();
 
            let word = concatenate_4bit_values(0b1011, dst, src1,src2);
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
         },
         ["sw", src, dst] => {
             let src = src.parse::<u8>().unwrap();
@@ -100,8 +100,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
            let word = concatenate_4bit_values(0b0111, src, dst1,dst2);
            let bin = format!("{:016b}", word);
            println!("Im saving : {word}, {bin}");
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
          
         },
         ["lw", dst,  src1] => {
@@ -111,8 +111,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
             let src2 = (src & 0x0F) as u8;
           
            let word = concatenate_4bit_values(0b0110, dst, src1,src2);
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
         },
         ["bne", src1, src2,dest] => {
 
@@ -123,8 +123,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
            let word = concatenate_4bit_values(0b1100, comp1, comp2,dst);
            let bin = format!("{:016b}", word);
            println!("Im checking branch  : {word}, {bin}");
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
         },
         ["sl", dst, src1, src2] => {
             let dst = dst.parse::<u8>().unwrap();
@@ -134,8 +134,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
            let word = concatenate_4bit_values(0b1101, dst, src1,src2);
            let bin = format!("{:016b}", word);
            println!("Im shifting left : {word}, {bin}");
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
         },
         ["sr", dst, src1, src2] => {
             let dst = dst.parse::<u8>().unwrap();
@@ -145,8 +145,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
            let word = concatenate_4bit_values(0b1110, dst, src1,src2);
            let bin = format!("{:016b}", word);
            println!("Im shifting right : {word}, {bin}");
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
         },
 
             // I Format
@@ -163,8 +163,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
                let word = concatenate_4bit_values(0b0010, dst,imm1,imm2);
                let bin = format!("{:016b}", word);
                println!("Im loading immediate : {word}, {bin}");
-                decode(word, mach)
-             
+                //decode(word, mach)
+                return word;
             }, ["swi", dst, imm] => {  
                 let dst = dst.parse::<u8>().unwrap();
                 let dst1 = dst >> 4;
@@ -175,8 +175,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
                let word = concatenate_4bit_values(0b0001, dst1,dst2, imm);
                let bin = format!("{:016b}", word);
                println!("Im storing immediate : {word}, {bin}");
-                decode(word, mach)
-             
+                //decode(word, mach)
+                return word;
             },
 
 
@@ -188,8 +188,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
            let word = concatenate_4bit_values(0b0010, dst, src1,imm);
            let bin = format!("{:016b}", word);
            println!("Im adding immediate : {word}, {bin}");
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
         },
         ["subi", dst, src1, imm] => {
             let dst = dst.parse::<u8>().unwrap();
@@ -199,8 +199,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
            let word = concatenate_4bit_values(0b0011, dst, src1,imm);
            let bin = format!("{:016b}", word);
            println!("Im subing immediate : {word}, {bin}");
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
         },
         ["andi", dst, src1, imm] => {
             let dst = dst.parse::<u8>().unwrap();
@@ -210,8 +210,8 @@ pub fn parse_line(line: &str,mach : &mut Machine){
            let word = concatenate_4bit_values(0b0100, dst, src1,imm);
            let bin = format!("{:016b}", word);
            println!("Im and-ing immediate : {word}, {bin}");
-            decode(word, mach)
-         
+            //decode(word, mach)
+            return word;
         },
         ["ori", dst, src1, imm] => {
             let dst = dst.parse::<u8>().unwrap();
@@ -221,13 +221,24 @@ pub fn parse_line(line: &str,mach : &mut Machine){
            let word = concatenate_4bit_values(0b0101, dst, src1,imm);
            let bin = format!("{:016b}", word);
            println!("Im or-ing immediate : {word}, {bin}");
-            decode(word, mach)
+            //decode(word, mach)
+            return word;
          
         },
+        ["lbl", label] => {
+
+            let word = concatenate_4bit_values(0b000, 0b000, 0b0000, mach.registers[13] as u8);
+            
+            return word;
+        }
+    
+
+        
 
        
        
-        _ => println!("Finished Reading"),
+        _ => {println!("Finished Reading");
+        return 32727;}
 
 
     }

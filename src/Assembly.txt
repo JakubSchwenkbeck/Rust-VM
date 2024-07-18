@@ -1,4 +1,2 @@
-Fibonacci
 
-lwi 1 1
 
