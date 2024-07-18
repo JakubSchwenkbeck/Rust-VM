@@ -1,7 +1,7 @@
 use crate::{instructions_regs::*, u4::U4, Machine};
 //* Interpreter for Assembler Level Register ISA */
 // DECODE ON BINARY LEVEL
-fn decode(word: u16,mach : &mut Machine)  {
+pub fn decode(word: u16,mach : &mut Machine)  {
     let opcode = (word >> 12) as u8 ;  // Extract the opcode (first 4 bits)
     
     match opcode {
@@ -80,11 +80,27 @@ fn decode(word: u16,mach : &mut Machine)  {
             reg_sub(mach, rd, rs, rt);
            
         },
+        0b1010 => {
+            let rd = U4::new(((word >> 8) & 0xF) as u8);
+            let rs = U4::new(((word >> 4) & 0xF) as u8);
+            let rt = U4::new((word & 0xF) as u8);
+          
+            reg_and(mach, rd, rs, rt);
+           
+        },
+        0b1011 => {
+            let rd = U4::new(((word >> 8) & 0xF) as u8);
+            let rs = U4::new(((word >> 4) & 0xF) as u8);
+            let rt = U4::new((word & 0xF) as u8);
+          
+            reg_or(mach, rd, rs, rt);
+           
+        },
 
 
 
         
-        _ => {mach.step();}
+        _ => {let _ = mach.step();}
     }
 }
 

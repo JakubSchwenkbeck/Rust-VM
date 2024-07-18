@@ -1,4 +1,5 @@
 
+use binary_assembler::decode;
 use instructions_regs::{reg_add, reg_immediate_add, reg_load_word, reg_print, reg_store_word, reg_jump};
 // Virtual Machine Binary 
 use rust_projects::*;
@@ -40,8 +41,14 @@ pub fn main()-> Result<(), & 'static str> {
     virtualm.step()?;
 
     reg_jump(&mut virtualm,12, U4::new(0) );
-    virtualm.step()
+    virtualm.step()?;
 
+    println!("Trying the Machine Code instructions:");
+
+    let bin = 0b0000010000000111;
+    decode(bin,&mut virtualm );
+    reg_print(&mut virtualm, U4::new(4));
+    virtualm.step()
 
 
 }
