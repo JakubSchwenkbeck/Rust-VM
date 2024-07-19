@@ -11,7 +11,7 @@ pub fn decode(word: u16,mach : &mut Machine)  {
     let opcode = (word >> 12) as u8 ;  // Extract the opcode (first 4 bits)
     if word!= 32727{
         
-    match opcode {
+      match opcode {
 
         // I - FORMAT 
 
@@ -157,6 +157,7 @@ pub fn decode(word: u16,mach : &mut Machine)  {
 
         
         _ => {let _ = mach.step();}
+
     }
 }
 }

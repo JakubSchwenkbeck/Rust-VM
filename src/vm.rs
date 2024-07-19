@@ -15,15 +15,16 @@ pub enum Register {
     Arg1,
     Arg2,
     Val1,
-    Val2,
+    FLAGS,
     Temp1,
     Temp2,
     Temp3,
     Temp4,
     SP,      // Stack Pointer
     PC,      // Program Counter
-    BP,      // Base Pointer
-    FLAGS,   // Flags register
+    BP, 
+    OUTPUT,     // Base Pointer
+      // Flags register
 }
 
 // Implement Debug trait for Register
@@ -37,15 +38,15 @@ impl fmt::Debug for Register {
             Register::Arg1 => write!(f, "Argument 1"),
             Register::Arg2 => write!(f, "Argument 2"),
             Register::Val1 => write!(f, "Value 1"),
-            Register::Val2 => write!(f, "Value 2"),
             Register::Temp1 => write!(f, "Temp Register 1"),
             Register::Temp2 => write!(f, "Temp Register 2"),
             Register::Temp3 => write!(f, "Temp Register 3"),
             Register::Temp4 => write!(f, "Temp Register 4"),
+            Register::FLAGS => write!(f, "Flags Register"),
             Register::SP => write!(f, "Stack Pointer"),
             Register::PC => write!(f, "Program Counter"),
             Register::BP => write!(f, "Base Pointer"),
-            Register::FLAGS => write!(f, "Flags Register"),
+            Register::OUTPUT => write!(f, "Output"),
         }
     }
 }
@@ -67,7 +68,7 @@ pub trait EnumIter {
             Register::Arg1,
             Register::Arg2,
             Register::Val1,
-            Register::Val2,
+            Register::FLAGS,
             Register::Temp1,
             Register::Temp2,
             Register::Temp3,
@@ -75,7 +76,7 @@ pub trait EnumIter {
             Register::SP,
             Register::PC,
             Register::BP,
-            Register::FLAGS,
+            Register::OUTPUT,
         ];
         REGISTERS.iter()
     }

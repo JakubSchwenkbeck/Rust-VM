@@ -9,7 +9,9 @@ VM:
        - each process has own memory spaces
        - relative adressing?
 
-    -> User input into console
+    -> File creation, manipulation (create .txt and let it be manipulated)
+
+    -> User input into console 
        - enable memory manipulation via terminal
        - enable file creation
        - enable getting vm specs
@@ -20,3 +22,4 @@ VM:
 
    -> let the console input be instructions like 5+5 and calculate in regs?
 
+   

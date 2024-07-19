@@ -2,6 +2,8 @@
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
 
+use crate::instructions::instructions_regs::reg_single_print;
+use crate::u4::U4;
 use crate::Machine;
 
 use super::decoder::decode;
@@ -225,8 +227,12 @@ pub fn parse_line(line: &str,mach :  &mut Machine) -> u16{
             return word;
          
         },
-              
 
+       /*["print", dst]=>{
+                        
+            return 32727;
+        } 
+        */
        
        
         _ => {println!("Finished Reading");

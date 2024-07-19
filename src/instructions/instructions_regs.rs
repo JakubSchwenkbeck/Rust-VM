@@ -42,7 +42,7 @@ use crate::vm::Machine;
 //* Util */
 pub fn reg_single_print(mach: &mut Machine, dest: U4){
         let v = mach.registers[dest];
-        println!("in Reg : {v}");
+        println!("Final Value in Output-Reg : {v}");
         let binstring =format!("{:b}", v);
         println!("As binary: {binstring}");
     
