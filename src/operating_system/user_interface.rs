@@ -1,7 +1,7 @@
 
     use std::{io::{self, Write}, process::Command};
 
-    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode, parse_exec::{parse_programm, run_programm}}, Machine};
+    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode, parse_exec::{parse_programm, run_programm}}, operating_system::memory_manager::mem_alloc, Machine};
 
     pub fn cmd_line_interface(mach : &mut Machine) {
         
@@ -38,6 +38,8 @@
                     println!("parse <Filename> - trying to parse the file");
                     println!("exec <Filename> - trying to execute the file");
                     println!("instr <Assembler instruction> - executes the single Assembler line");
+                    println!("malloc <Filename> - allocating memory space for file");
+                    println!("printmem <lenght> - prints first length memory spaces");
                 } 
                 _ if input.starts_with("parse ") => {
                     let filename = input.strip_prefix("parse ").unwrap();
@@ -84,6 +86,18 @@
                       decode(word, mach);
                     reg_printall(mach);
         
+                }
+                _ if input.starts_with("printmem ") => {
+                    let l = input.strip_prefix("printmem ").unwrap();
+                    let length = l.parse::<u16>().unwrap();
+                   for i in 1..length{
+                        let val = mach.memory.read(i).unwrap();
+                        print!("Memory {i} = {val}  ");
+                   }
+                }
+                _ if input.starts_with("malloc ") => {
+                    let filename = input.strip_prefix("malloc ").unwrap();
+                    mem_alloc(filename);
                 }
 
                 _ => {

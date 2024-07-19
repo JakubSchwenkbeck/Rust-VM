@@ -32,6 +32,7 @@ pub fn read_lines_from_file(filename: &str) -> io::Result<Vec<String>> {
 
 pub fn parse_line(line: &str,mach :  &mut Machine) -> u16{
     let parts: Vec<&str> = line.split_whitespace().collect();
+    let _ = mach;
     match parts.as_slice() {
         ["jump", addr, offset] => {
             let dst = addr.parse::<u8>().unwrap()  ;
@@ -42,6 +43,7 @@ pub fn parse_line(line: &str,mach :  &mut Machine) -> u16{
             let off =  offset.parse::<u8>().unwrap();
 
            let word = concatenate_4bit_values(0b1111, dst1,dst2, off);
+        
             
             //decode(word, mach);
             return word;

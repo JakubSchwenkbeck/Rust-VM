@@ -13,6 +13,8 @@ pub mod u4;
 
 pub mod operating_system{
     pub mod user_interface;
+    pub mod memory_manager;
+    
 }
 
 pub mod instructions {
@@ -28,3 +30,5 @@ pub mod interpreter{
 }
 
 pub use crate::vm::*;
+
+    

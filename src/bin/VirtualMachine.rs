@@ -7,5 +7,5 @@ pub fn main()-> Result<(), & 'static str> {
     
     cmd_line_interface(&mut virtualm);
 
-    virtualm.step()
+   Ok(())
 }
