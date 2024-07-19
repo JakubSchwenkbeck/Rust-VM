@@ -2,7 +2,7 @@
 
 
 
-use std::fmt::format;
+
 
 use instructions::instructions_regs;
 use instructions_regs::*;
@@ -10,7 +10,6 @@ use interpreter::assembler::*;
 use interpreter::decoder::decode;
 // Virtual Machine Binary 
 use rust_projects::*;
-use rust_projects::u4::U4;
 
 
 pub fn main()-> Result<(), & 'static str> {

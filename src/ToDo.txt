@@ -1,0 +1,22 @@
+
+VM:
+
+- OS :
+    -> Booting
+
+    -> Manage Virtual Memory:
+       - implement system for memory management
+       - each process has own memory spaces
+       - relative adressing?
+
+    -> User input into console
+       - enable memory manipulation via terminal
+       - enable file creation
+       - enable getting vm specs
+       - enable getting file specs
+       - load files and execute them
+
+    -> File explorer via terminal
+
+   -> let the console input be instructions like 5+5 and calculate in regs?
+
