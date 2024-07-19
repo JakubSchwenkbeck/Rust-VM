@@ -12,6 +12,8 @@
         // start booting...
 
         // End booting....
+        println!("-16 Bit Virtual Machine in Rust-");
+        println!(" ");
         println!("Welcome to my CLI!");
         println!("Type 'help' to see available commands.");
 
@@ -62,6 +64,8 @@
                     .args(&["/C", "cls"])
                     .status()
                     .unwrap();
+                    println!("-16 Bit Virtual Machine in Rust-");
+                    println!(" ");
         
                 }
                 _ if input.starts_with("cls") => {
@@ -69,6 +73,8 @@
                     .args(&["/C", "cls"])
                     .status()
                     .unwrap();
+                 println!("-16 Bit Virtual Machine in Rust-");
+                println!(" ");
         
                 }
                 _ if input.starts_with("instr ") => {
