@@ -159,7 +159,7 @@ pub fn reg_printall(mach: &mut Machine){
 
             }
             pub fn reg_immediate_sub(mach :&mut Machine ,dest: U4,source : U4,_input :  U4){
-                if mach.registers[source] > _input.0 as u16{
+                if mach.registers[source] >= _input.0 as u16{
                 mach.registers[dest] = mach.registers[source] - _input.0 as u16;}
                 else {
 

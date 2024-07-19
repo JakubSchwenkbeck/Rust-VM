@@ -160,7 +160,7 @@ pub fn parse_line(line: &str,mach :  &mut Machine) -> u16{
                 let imm2 = imm & 0x0F;
             
     
-               let word = concatenate_4bit_values(0b0010, dst,imm1,imm2);
+               let word = concatenate_4bit_values(0b0000, dst,imm1,imm2);
                let bin = format!("{:016b}", word);
                println!("Im loading immediate : {word}, {bin}");
                 //decode(word, mach)

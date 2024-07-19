@@ -19,7 +19,10 @@ pub fn decode(word: u16,mach : &mut Machine)  {
             
             let rd = ((word >> 8) & 0xF) as u8;       // Extract the destination register (next 4 bits)
             let val = (word & 0xFF) as u8;
-            
+
+
+                println!("decoding : rd {rd}");
+                println!("value to write : {val}"); 
 
           reg_immediate_load_word(mach,U4::new(rd),val);
         },
@@ -42,7 +45,8 @@ pub fn decode(word: u16,mach : &mut Machine)  {
             let rd = U4::new(((word >> 8) & 0xF) as u8);
             let rs = U4::new(((word >> 4) & 0xF) as u8);
             let im = U4::new((word & 0xF) as u8);
-          
+           // println!("Destinatoon {rd}, sou")
+
             reg_immediate_sub(mach, rd, rs, im);
            
         },
