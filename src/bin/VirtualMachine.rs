@@ -1,14 +1,4 @@
-
-
-
-
-
-use operating_system::user_interface::{self, cmd_line_interface};
-use instructions::instructions_regs;
-use instructions_regs::*;
-use interpreter::assembler::*;
-use interpreter::decoder::decode;
-// Virtual Machine Binary 
+use operating_system::user_interface::cmd_line_interface;
 use rust_projects::*;
 
 

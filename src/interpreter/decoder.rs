@@ -4,7 +4,6 @@ use instructions_regs::*;
 use crate::{instructions::*, u4::U4, Machine};
 //* Interpreter for Assembler Level Register ISA */
 // DECODE ON BINARY LEVEL
-use std::collections::HashMap;
 
 
 pub fn decode(word: u16,mach : &mut Machine)  {
