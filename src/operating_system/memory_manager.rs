@@ -39,6 +39,11 @@ impl Interval{ // creates a machine
     }
 }
 
+pub fn get_interval(filename : &str) ->(u16,u16){
+    let  map = HASHMAP.lock().unwrap();
+    let x = map.get(filename).unwrap();
+    (x.start, x.end)
+}
 
     pub fn mem_alloc(filename : &str)-> (bool,Interval){
         // get file size:
@@ -47,10 +52,10 @@ impl Interval{ // creates a machine
         let mut map = HASHMAP.lock().unwrap();
         if !map.contains_key(filename){
        
-                let mem1 = (unsafe { LATEST_ADRESS } +1 ) as u16;
-                let mem2 = (unsafe { LATEST_ADRESS }  as u16 + val ) ;
+                let mem1 = (unsafe { LATEST_ADRESS }  ) as u16;
+                let mem2 = 2*  (unsafe { LATEST_ADRESS }  as u16 + val ) ;
                 let mem_interval =   Interval::new(mem1,mem2);
-                unsafe { LATEST_ADRESS = mem2 as i32 };
+                unsafe { LATEST_ADRESS = (mem2 +1 )as i32 };
                 let result =mem_interval;
                
                 map.insert(filename.to_owned(),mem_interval );

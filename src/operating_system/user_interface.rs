@@ -83,7 +83,7 @@
                     let filename = input.strip_prefix("instr ").unwrap();
                    
                    let word = parse_line(filename,mach);
-                      decode(word, mach);
+                      decode(word, mach, 0);
                     reg_printall(mach);
         
                 }

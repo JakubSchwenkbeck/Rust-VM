@@ -6,7 +6,7 @@ use crate::{instructions::*, u4::U4, Machine};
 // DECODE ON BINARY LEVEL
 
 
-pub fn decode(word: u16,mach : &mut Machine)  {
+pub fn decode(word: u16,mach : &mut Machine,current : u16)  {
     let opcode = (word >> 12) as u8 ;  // Extract the opcode (first 4 bits)
     if word!= 32727{
         
@@ -124,7 +124,7 @@ pub fn decode(word: u16,mach : &mut Machine)  {
             let rs = U4::new(((word >> 4) & 0xF) as u8);
             let rt = U4::new((word & 0xF) as u8);
           
-            reg_branch_not_equal(mach, rd, rs, rt);
+            reg_branch_not_equal(mach, rd, rs, rt,current);
            
         },
         0b1101 => {

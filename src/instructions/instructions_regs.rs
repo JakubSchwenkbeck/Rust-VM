@@ -123,10 +123,10 @@ pub fn reg_printall(mach: &mut Machine){
                 mach.registers[dest] = sum;
 
             }
-            pub fn reg_branch_not_equal( mach :&mut Machine ,comp1: U4,comp2 : U4, dest: U4){
+            pub fn reg_branch_not_equal( mach :&mut Machine ,comp1: U4,comp2 : U4, dest: U4,current : u16){
                 if mach.registers[comp1] != mach.registers[comp2]{
-                        reg_jump(mach, dest.0 , U4::new(0));
-                        let d = dest.0;
+                        reg_jump(mach, (current +dest.0 as u16 )as u8 , U4::new(0));
+                        let d = (current + dest.0 as u16 )as u8;
                         println!("Im branching to {d}")
                 }
 
