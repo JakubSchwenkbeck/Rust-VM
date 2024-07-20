@@ -1,0 +1,6 @@
+lwi 0 10
+lwi 1 1
+add 2 2 1
+sub 0 0 1
+bne 0 15 2
+add 15 2 0

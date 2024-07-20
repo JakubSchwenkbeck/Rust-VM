@@ -127,7 +127,8 @@ pub fn reg_printall(mach: &mut Machine){
                 if mach.registers[comp1] != mach.registers[comp2]{
                         reg_jump(mach, (current +dest.0 as u16 )as u8 , U4::new(0));
                         let d = (current + dest.0 as u16 )as u8;
-                        println!("Im branching to {d}")
+                        println!("Im branching to {d}");
+                        mach.registers[13] = d as u16;
                 }
 
             }

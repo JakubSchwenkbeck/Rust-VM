@@ -99,6 +99,15 @@ impl Machine{ // creates a machine
             memory: Box::new(LinMem::new(8 * 1024)), // init mem with 8kb
         }
     }
+    pub fn reset_registers_except_pc(&mut self) {
+        let pc_value = self.registers[Register::PC as usize];
+        for (i, reg) in self.registers.iter_mut().enumerate() {
+            if i != Register::PC as usize {
+                *reg = 0;
+            }
+        }
+        self.registers[Register::PC as usize] = pc_value;
+    }
 
     pub fn step(&mut self)-> Result<(),&'static str> { // Return is a enum an catches OK and Err
           /*  

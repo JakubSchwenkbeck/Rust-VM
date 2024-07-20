@@ -123,7 +123,7 @@ pub fn decode(word: u16,mach : &mut Machine,current : u16)  {
             let rd = U4::new(((word >> 8) & 0xF) as u8);
             let rs = U4::new(((word >> 4) & 0xF) as u8);
             let rt = U4::new((word & 0xF) as u8);
-          
+        
             reg_branch_not_equal(mach, rd, rs, rt,current);
            
         },

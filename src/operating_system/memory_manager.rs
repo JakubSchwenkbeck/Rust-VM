@@ -39,6 +39,11 @@ impl Interval{ // creates a machine
     }
 }
 
+pub fn get_latest_addr() ->i32{
+    unsafe { LATEST_ADRESS }
+}
+
+
 pub fn get_interval(filename : &str) ->(u16,u16){
     let  map = HASHMAP.lock().unwrap();
     let x = map.get(filename).unwrap();
