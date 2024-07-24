@@ -58,7 +58,7 @@ pub fn get_interval(filename : &str) ->(u16,u16){
         if !map.contains_key(filename){
        
                 let mem1 = (unsafe { LATEST_ADRESS }  ) as u16;
-                let mem2 = 2*  (unsafe { LATEST_ADRESS }  as u16 + val ) ;
+                let mem2 =  (unsafe { LATEST_ADRESS }  as u16 + 2* val ) ;
                 let mem_interval =   Interval::new(mem1,mem2);
                 unsafe { LATEST_ADRESS = (mem2 +1 )as i32 };
                 let result =mem_interval;
@@ -96,6 +96,7 @@ pub fn get_interval(filename : &str) ->(u16,u16){
 
 pub fn get_file_size(filename : &str) -> u16 {
     let map = HASHMAP.lock().unwrap();
+    
     if map.contains_key(filename) {
         let val = map.get(filename).unwrap();
         val.end - val.start
@@ -124,6 +125,7 @@ fn count_non_empty_lines(filename: &str) -> io::Result<u16> {
         .filter(|line| !line.trim().is_empty())  // Count only non-empty lines
         .count();
 
+         
     Ok(count as u16)
 }
 
