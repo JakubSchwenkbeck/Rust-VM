@@ -1,7 +1,13 @@
 
 VM:
 
+
+-> memory fragmentation!!!
+
 - OS :
+
+   
+
     -> Booting
 
     -> Manage Virtual Memory:

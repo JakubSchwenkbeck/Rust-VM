@@ -9,7 +9,19 @@ if ending == ".txt"{
 
 
     // encode each char into u8
-let ch: char = 'A';
+
+
+    // create tail
+
+
+
+}
+
+}
+
+pub fn fill_file()
+{
+    let ch: char = 'A';
 
 // Ensure the character is an ASCII character
 if ch.is_ascii() {
@@ -20,12 +32,5 @@ if ch.is_ascii() {
     println!("Character '{}' is not in the ASCII range", ch);
 }
     
-
-
-    // create tail
-
-
-
-}
 
 }
