@@ -1,5 +1,5 @@
 
-pub fn create_file(filename: &str,ending: &str){
+pub fn create_file(_filename: &str,ending: &str){
 
 if ending == ".txt"{
     // allocate memory:

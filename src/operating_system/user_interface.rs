@@ -1,7 +1,7 @@
 
     use std::{io::{self, Write}, process::Command};
 
-    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::memory_manager::{get_file_size, load_program, mem_alloc, run_program}, Machine};
+    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::memory_manager::{get_file_size, load_program, mem_alloc, mem_release, run_program}, Machine};
 
     pub fn cmd_line_interface(mach : &mut Machine) {
         
@@ -98,6 +98,10 @@
                 _ if input.starts_with("malloc ") => {
                     let filename = input.strip_prefix("malloc ").unwrap();
                     mem_alloc(filename,get_file_size(filename));
+                }
+                _ if input.starts_with("release ") => {
+                    let filename = input.strip_prefix("release ").unwrap();
+                    mem_release(filename);
                 }
 
                 _ => {

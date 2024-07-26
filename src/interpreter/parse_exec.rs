@@ -1,7 +1,4 @@
 
-use crate::{instructions::instructions_regs::{reg_printall, reg_single_print}, interpreter::decoder::decode, u4::U4, Machine};
-
-use super::assembler::{parse_line, read_lines_from_file};
 /*pub fn run_programm(virtualm :&mut Machine,filename: &str)-> Result<(), & 'static str> {
 
     virtualm.reset_registers_except_pc();
