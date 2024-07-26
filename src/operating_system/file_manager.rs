@@ -1,5 +1,5 @@
 
-pub fn createFile(filename: &str,ending: &str){
+pub fn create_file(filename: &str,ending: &str){
 
 if ending == ".txt"{
     // allocate memory:
@@ -19,9 +19,9 @@ if ending == ".txt"{
 
 }
 
-pub fn fill_file()
+pub fn fill_file(ch: char)
 {
-    let ch: char = 'A';
+   
 
 // Ensure the character is an ASCII character
 if ch.is_ascii() {

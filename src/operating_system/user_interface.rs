@@ -97,7 +97,7 @@
                 }
                 _ if input.starts_with("malloc ") => {
                     let filename = input.strip_prefix("malloc ").unwrap();
-                    mem_alloc(filename);
+                    mem_alloc(filename,100);
                 }
 
                 _ => {

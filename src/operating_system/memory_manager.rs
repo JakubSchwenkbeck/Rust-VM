@@ -1,119 +1,103 @@
-/*
-  Implement memory alloc (filename) -> bool:
+use std::collections::HashMap;
+use std::sync::Mutex;
+use lazy_static::lazy_static;
 
+const CHUNK_SIZE: u16 = 16; // Define the size of each chunk
 
-        params:   - start address 
-                  - end address
-
-        Hashmap puts (filename) to (address Intervall)
-
-        true if adresses free
-        false if not free
-
-    
-    */
-    use std::collections::HashMap;
-    use std::sync::Mutex;
-    use lazy_static::lazy_static;
-    
-    lazy_static! {
-        static ref HASHMAP: Mutex<HashMap<String, Interval>> = Mutex::new(HashMap::new());
-    }
-    
-    static mut LATEST_ADRESS: i32 = 0 ;
-    #[derive(Copy, Clone, Debug)]
-pub struct Interval{
-    pub start : u16,
-    pub end : u16,
-
+lazy_static! {
+    static ref HASHMAP: Mutex<HashMap<String, Vec<Chunk>>> = Mutex::new(HashMap::new());
+    static ref FREE_LIST: Mutex<Vec<Chunk>> = Mutex::new(vec![]);
 }
 
+static mut LATEST_ADDRESS: u16 = 0;
 
-impl Interval{ // creates a machine
-    pub fn new(s: u16,e: u16) -> Self { // 
-        Self{
-            start:s,
-            end : e,
-            
+#[derive(Copy, Clone, Debug)]
+pub struct Chunk {
+    pub start: u16,
+    pub end: u16,
+}
+
+impl Chunk {
+    pub fn new(start: u16) -> Self {
+        Self {
+            start,
+            end: start + CHUNK_SIZE - 1,
         }
     }
 }
 
-pub fn get_latest_addr() ->i32{
-    unsafe { LATEST_ADRESS }
+pub fn get_latest_addr() -> u16 {
+    unsafe { LATEST_ADDRESS }
 }
 
+pub fn mem_alloc(filename: &str, size: u16) -> bool {
+    let mut map = HASHMAP.lock().unwrap();
+    let mut free_list = FREE_LIST.lock().unwrap();
 
-pub fn get_interval(filename : &str) ->(u16,u16){
-    let  map = HASHMAP.lock().unwrap();
-    let x = map.get(filename).unwrap();
-    (x.start, x.end)
-}
-
-    pub fn mem_alloc(filename : &str)-> (bool,Interval){
-        // get file size:
-        let val = get_file_size(filename);
-           
-        let mut map = HASHMAP.lock().unwrap();
-        if !map.contains_key(filename){
-       
-                let mem1 = (unsafe { LATEST_ADRESS }  ) as u16;
-                let mem2 =  (unsafe { LATEST_ADRESS }  as u16 + 2* val ) ;
-                let mem_interval =   Interval::new(mem1,mem2);
-                unsafe { LATEST_ADRESS = (mem2 +1 )as i32 };
-                let result =mem_interval;
-               
-                map.insert(filename.to_owned(),mem_interval );
-                println!("start {mem1}, end{mem2}");
-            (true,result)
-        }
-        else{
-            println!("This file already allocated Memory space");
-            (false, Interval::new(0,0))
-            
-        }
-    }
-
-    pub fn mem_alloc_direct(filename : &str,input : u16)-> (bool,Interval){
-        // get mem1 
-        let mut map = HASHMAP.lock().unwrap();
-        if !map.contains_key(filename){
-       
-                let mem1 = (unsafe { LATEST_ADRESS } +1 ) as u16;
-                let mem2 = input;
-                let mem_interval =   Interval::new(mem1,mem2);
-                unsafe { LATEST_ADRESS = mem2 as i32 };
-                let result =mem_interval;
-                
-                map.insert(filename.to_owned(),mem_interval );
-                println!("start {mem1}, end {mem2}");
-            (true,result)
-        }else{
-            println!("This file already allocated Memory space");
-            (false,Interval::new(0,0))
-        }
-    }
-
-pub fn get_file_size(filename : &str) -> u16 {
-    let map = HASHMAP.lock().unwrap();
-    
     if map.contains_key(filename) {
-        let val = map.get(filename).unwrap();
-        val.end - val.start
+        println!("This file already allocated memory space");
+        return false;
+    }
 
-    }else{
-        match count_non_empty_lines(filename) {
-            Ok(count) =>count,
-            Err(e) => {println!("Error: {}", e); 0},
+    let mut chunks: Vec<Chunk> = vec![];
+    let mut remaining_size = size;
+
+    while remaining_size > 0 {
+        if let Some(free_chunk) = free_list.pop() {
+            chunks.push(free_chunk);
+            remaining_size -= CHUNK_SIZE.min(remaining_size);
+        } else {
+            let new_chunk = Chunk::new(unsafe { LATEST_ADDRESS });
+            unsafe { LATEST_ADDRESS += CHUNK_SIZE };
+            chunks.push(new_chunk);
+            remaining_size -= CHUNK_SIZE.min(remaining_size);
         }
     }
- 
-    
+
+    map.insert(filename.to_owned(), chunks);
+    true
+}
+
+pub fn mem_release(filename: &str) {
+    let mut map = HASHMAP.lock().unwrap();
+    let mut free_list = FREE_LIST.lock().unwrap();
+
+    if let Some(chunks) = map.remove(filename) {
+        for chunk in chunks {
+            free_list.push(chunk);
+        }
+        free_list.sort_by_key(|c| c.start);
+        let mut merged_list = vec![];
+        let mut current = free_list[0];
+        for &chunk in free_list.iter().skip(1) {
+            if current.end + 1 == chunk.start {
+                current.end = chunk.end;
+            } else {
+                merged_list.push(current);
+                current = chunk;
+            }
+        }
+        merged_list.push(current);
+        *free_list = merged_list;
+        println!("Memory released and merged: {:?}", free_list);
+    } else {
+        println!("No memory allocated for this file");
+    }
+}
+
+// Mock function to simulate file size
+pub fn get_file_size(filename: &str) -> u16 {
+    match count_non_empty_lines(filename) {
+        Ok(count) => count,
+        Err(e) => {
+            println!("Error: {}", e);
+            0
+        }
+    }
 }
 
 use std::fs::File;
 use std::io::{self, BufRead};
-
 
 fn count_non_empty_lines(filename: &str) -> io::Result<u16> {
     let file = File::open(filename)?;
@@ -121,24 +105,9 @@ fn count_non_empty_lines(filename: &str) -> io::Result<u16> {
 
     let count = reader
         .lines()
-        .filter_map(Result::ok)  // Skip over lines that can't be read
-        .filter(|line| !line.trim().is_empty())  // Count only non-empty lines
+        .filter_map(Result::ok)
+        .filter(|line| !line.trim().is_empty())
         .count();
 
-         
     Ok(count as u16)
 }
-
-
-pub fn memory_release(filename : &str) {
-    let _ = filename;
-}
-
-/*
-  Implement memory release (filename or Intervall):
-
-        releases memory
-        (deletes from hashmap)
-
-        works with filename or an given intervall
-*/
