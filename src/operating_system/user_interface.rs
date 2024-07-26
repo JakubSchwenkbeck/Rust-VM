@@ -1,7 +1,7 @@
 
     use std::{io::{self, Write}, process::Command};
 
-    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode, parse_exec::{parse_programm, run_programm}}, operating_system::memory_manager::mem_alloc, Machine};
+    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::memory_manager::{get_file_size, load_program, mem_alloc, run_program}, Machine};
 
     pub fn cmd_line_interface(mach : &mut Machine) {
         
@@ -43,8 +43,8 @@
                 } 
                 _ if input.starts_with("parse ") => {
                     let filename = input.strip_prefix("parse ").unwrap();
-                    let p = parse_programm(mach, filename);
-                    if p.is_ok(){
+                    let p =load_program(mach, filename);
+                    if p{
                         println!("Succesfully parsed {filename}");
                     }else {
                         println!("Parsing was not successfull : {p:?}");
@@ -54,7 +54,7 @@
                 }
                 _ if input.starts_with("exec ") => {
                     let filename = input.strip_prefix("exec ").unwrap();
-                    let p =  run_programm(mach,filename);
+                    let p =  run_program(mach,filename);
                     if p.is_ok(){
                         println!("Succesfully executed {filename}");
                     }else {
@@ -97,7 +97,7 @@
                 }
                 _ if input.starts_with("malloc ") => {
                     let filename = input.strip_prefix("malloc ").unwrap();
-                    mem_alloc(filename,100);
+                    mem_alloc(filename,get_file_size(filename));
                 }
 
                 _ => {

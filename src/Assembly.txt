@@ -5,3 +5,13 @@ add 2 1 2
 subi 0 0 2
 bne 0 15 2
 add 15 2 0
+lwi 9 1
+add 9 9 1
+add 9 9 1
+add 9 9 1
+add 9 9 1
+add 9 9 1
+add 9 9 1
+add 9 9 1
+add 9 9 1
+add 9 9 1

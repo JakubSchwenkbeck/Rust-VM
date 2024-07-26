@@ -99,6 +99,10 @@ pub fn get_file_size(filename: &str) -> u16 {
 use std::fs::File;
 use std::io::{self, BufRead};
 
+use crate::instructions::instructions_regs::{reg_printall, reg_single_print};
+use crate::interpreter::assembler::{parse_line, read_lines_from_file};
+use crate::interpreter::decoder::decode;
+use crate::u4::U4;
 use crate::Machine;
 
 fn count_non_empty_lines(filename: &str) -> io::Result<u16> {
@@ -114,15 +118,34 @@ fn count_non_empty_lines(filename: &str) -> io::Result<u16> {
     Ok(count as u16)
 }
 
-pub fn load_program(mach : &mut Machine, filename: &str) -> bool {
-    let  map = HASHMAP.lock().unwrap();
+pub fn load_program(mach: &mut Machine, filename: &str) -> bool {
+    let map = HASHMAP.lock().unwrap();
+    
+    // Check if the program is allocated in memory
     if let Some(chunks) = map.get(filename) {
+        // Read all the program data at once
+        let program_data = read_program_data(mach, filename);
+        
         let mut addr = chunks[0].start;
+        let mut data_index = 0; // Index for accessing program_data
+
+        // Iterate through the allocated chunks
         for chunk in chunks.iter() {
-            let program_data = read_program_data(mach,filename, chunk.end - chunk.start + 1);
-            for &byte in program_data.iter() {
-                mach.memory.write2(addr, byte);
-                addr += 2;
+            let chunk_size = (chunk.end - chunk.start + 1) as usize; // Calculate the size of the current chunk
+            let mut bytes_written = 0; // Keep track of how many bytes we've written to the current chunk
+
+            // Write to the current chunk until it's full or there is no more data
+            while bytes_written < chunk_size && data_index < program_data.len() {
+                // Write each byte to the memory
+                mach.memory.write2(addr, program_data[data_index]);
+                addr += 2; // Move to the next address (2 bytes per instruction)
+                bytes_written += 2; // Increment the count of bytes written
+                data_index += 1; // Move to the next program data
+            }
+
+            // If we've exhausted the program data, we can stop writing
+            if data_index >= program_data.len() {
+                break;
             }
         }
         true
@@ -131,7 +154,57 @@ pub fn load_program(mach : &mut Machine, filename: &str) -> bool {
     }
 }
 
-fn read_program_data(mach: &mut Machine, _filename: &str, size: u16) -> Vec<u16> {
-    // Mock data loading, should be replaced with actual file read
-    vec![0; size as usize]
+
+fn read_program_data(mach: &mut Machine, filename: &str) -> Vec<u16> {
+    let lines =read_lines_from_file(&filename).unwrap();
+
+    let mut res: Vec<u16>= Vec::new(); 
+    for line in lines{
+        res.push(parse_line(&line,   mach))
+    
+    }
+    res
+}
+pub fn run_program(virtualm: &mut Machine, filename: &str) -> Result<(), &'static str> {
+    // Load the program into the virtual machine memory
+  
+    // Reset the virtual machine's registers except the program counter (PC)
+    virtualm.reset_registers_except_pc();
+
+
+ // Retrieve the allocated chunks for the program
+ let map = HASHMAP.lock().unwrap();
+ let chunks = map.get(filename).ok_or("Program not found in memory")?;
+ let start = chunks[0].start;
+ let end = chunks.last().unwrap().end;
+
+ println!("Start {start}, End {end}");
+
+ // Set the initial program counter (PC) to the start address
+ virtualm.registers[13] = start;
+
+ // Main execution loop
+ while let Some(l) = virtualm.memory.read2(virtualm.registers[13]) {
+     // Decode and execute the instruction
+     decode(l, virtualm, start);
+
+     // Print current state for debugging
+     let current_pc = virtualm.registers[13];
+     println!("current: {current_pc}");
+     println!("{l}");
+     reg_printall(virtualm);
+
+     // Advance the program counter (PC) by 2 (since each instruction is 2 bytes)
+     virtualm.registers[13] += 2;
+
+     // Check if we have reached the end of the allocated chunks
+     if virtualm.registers[13] > end {
+         break;
+     }
+ }
+
+ // Print the final state of the specific register
+ reg_single_print(virtualm, U4::new(15));
+
+ Ok(())
 }

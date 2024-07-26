@@ -1,9 +1,8 @@
 
-use crate::{instructions::instructions_regs::{reg_printall, reg_single_print}, interpreter::decoder::decode, operating_system::memory_manager::get_interval, u4::U4, Machine};
+use crate::{instructions::instructions_regs::{reg_printall, reg_single_print}, interpreter::decoder::decode, u4::U4, Machine};
 
 use super::assembler::{parse_line, read_lines_from_file};
-
-pub fn run_programm(virtualm :&mut Machine,filename: &str)-> Result<(), & 'static str> {
+/*pub fn run_programm(virtualm :&mut Machine,filename: &str)-> Result<(), & 'static str> {
 
     virtualm.reset_registers_except_pc();
    let c = get_interval(filename);
@@ -38,6 +37,13 @@ pub fn run_programm(virtualm :&mut Machine,filename: &str)-> Result<(), & 'stati
 pub fn parse_programm(virtualm :&mut Machine,filename: &str)-> Result<(), & 'static str> {
 let lines =read_lines_from_file(&filename).unwrap();
 
+let mut res: Vec<u16>;
+for line in lines{
+    res.push(parse_line(&line,   virtualm))
+
+
+
+}
 let c = get_interval(filename);
 let mut start = c.0;
 let end = c.1;
@@ -58,3 +64,4 @@ for line in lines{
 Ok(())
 
 }
+*/
