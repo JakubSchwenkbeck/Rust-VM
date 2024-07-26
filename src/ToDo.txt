@@ -2,18 +2,10 @@
 VM:
 
 
--> memory fragmentation!!!
 
 - OS :
 
-   
-
-    -> Booting
-
-    -> Manage Virtual Memory:
-       - implement system for memory management
-       - each process has own memory spaces
-       - relative adressing?
+       -> Booting
 
     -> File creation, manipulation (create .txt and let it be manipulated)
 

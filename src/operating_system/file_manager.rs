@@ -1,3 +1,29 @@
+use crate::{vm, Machine};
+
+
+pub fn store_text<'a>(mach:&'a mut Machine, text: &'a str, start_address: usize) -> Result<usize, &'a str> {
+    let bytes = text.as_bytes();
+
+    if start_address + bytes.len() > vm::Machine::get_mem_size() {
+        return Err("Not enough memory to store text.");
+    }
+
+    for (i, &byte) in bytes.iter().enumerate() {
+        mach.memory.write((start_address + i) as u16, byte);
+    }
+    Ok(start_address + bytes.len())
+}
+
+pub fn read_text(mach:&mut Machine, start_address: usize, length: usize) -> String {
+    let mut text = Vec::new();
+    for i in 0..length {
+        let byte = mach.memory.read((start_address + i) as u16).unwrap();
+        text.push(byte);
+    }
+    String::from_utf8_lossy(&text).to_string()
+}
+
+
 
 pub fn create_file(_filename: &str,ending: &str){
 

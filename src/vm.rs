@@ -91,14 +91,22 @@ pub struct Machine{
      pub memory : Box<dyn Addressable>,
      // first version of memory Box puts it on the heap instead of stack, might change later
 }
+const MEM_SIZE: i32 = 8 * 1024;
+
 
 impl Machine{ // creates a machine
     pub fn new() -> Self { // 
         Self{
             registers:[0;16],
-            memory: Box::new(LinMem::new(8 * 1024)), // init mem with 8kb
+            memory: Box::new(LinMem::new(MEM_SIZE as usize)), // init mem with 8kb
         }
+    }   
+
+    pub fn get_mem_size() -> usize{
+        MEM_SIZE as usize
     }
+
+
     pub fn reset_registers_except_pc(&mut self) {
         let pc_value = self.registers[Register::PC as usize];
         for (i, reg) in self.registers.iter_mut().enumerate() {
