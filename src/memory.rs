@@ -55,6 +55,7 @@ impl LinMem{
                 size : n,
               }
     }
+    
 
 }
 

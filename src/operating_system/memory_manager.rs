@@ -99,6 +99,8 @@ pub fn get_file_size(filename: &str) -> u16 {
 use std::fs::File;
 use std::io::{self, BufRead};
 
+use crate::Machine;
+
 fn count_non_empty_lines(filename: &str) -> io::Result<u16> {
     let file = File::open(filename)?;
     let reader = io::BufReader::new(file);
@@ -110,4 +112,26 @@ fn count_non_empty_lines(filename: &str) -> io::Result<u16> {
         .count();
 
     Ok(count as u16)
+}
+
+pub fn load_program(mach : &mut Machine, filename: &str) -> bool {
+    let  map = HASHMAP.lock().unwrap();
+    if let Some(chunks) = map.get(filename) {
+        let mut addr = chunks[0].start;
+        for chunk in chunks.iter() {
+            let program_data = read_program_data(mach,filename, chunk.end - chunk.start + 1);
+            for &byte in program_data.iter() {
+                mach.memory.write2(addr, byte);
+                addr += 2;
+            }
+        }
+        true
+    } else {
+        false
+    }
+}
+
+fn read_program_data(mach: &mut Machine, _filename: &str, size: u16) -> Vec<u16> {
+    // Mock data loading, should be replaced with actual file read
+    vec![0; size as usize]
 }
