@@ -1,7 +1,7 @@
 
-    use std::{io::{self, Write}, process::Command};
+    use std::{io::{self, Write}, path::Display, process::Command};
 
-    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::memory_manager::{get_file_size, load_program, mem_alloc, mem_release, run_program}, Machine};
+    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::memory_manager::{get_chunk_size, get_file_size, get_unique_filenames, load_program, mem_alloc, mem_release, print_unique_filenames, run_program}, Machine};
 
     pub fn cmd_line_interface(mach : &mut Machine) {
         
@@ -40,6 +40,9 @@
                     println!("instr <Assembler instruction> - executes the single Assembler line");
                     println!("malloc <Filename> - allocating memory space for file");
                     println!("printmem <lenght> - prints first length memory spaces");
+                    println!("show config - displays current configurations");
+                    println!("set config - lets the user change system configurations");
+                    println!("ls - lists all loaded programms/data")
                 } 
                 _ if input.starts_with("parse ") => {
                     let filename = input.strip_prefix("parse ").unwrap();
@@ -103,6 +106,23 @@
                     let filename = input.strip_prefix("release ").unwrap();
                     mem_release(filename);
                 }
+                _ if input.starts_with("show config")=>{
+
+                        let chunkconfig = get_chunk_size();
+
+                  println!("Configs:");
+                  println!("-System : 16 Bit");
+                  println!("--Chunk size (immutable) : {chunkconfig}");
+
+                }
+                _ if input.starts_with("ls")=>{ 
+
+                    let filenames = get_unique_filenames();
+                    println!("Listing of all programs and data in memory:");
+                    print_unique_filenames(filenames);
+
+
+                  }
 
                 _ => {
                     println!("Unknown command: '{}'", input);

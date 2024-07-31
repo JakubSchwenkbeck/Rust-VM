@@ -4,13 +4,18 @@ use lazy_static::lazy_static;
 
 const CHUNK_SIZE: u16 = 16; // Define the size of each chunk
 
+
+// static data structures
 lazy_static! {
     static ref HASHMAP: Mutex<HashMap<String, Vec<Chunk>>> = Mutex::new(HashMap::new());
     static ref FREE_LIST: Mutex<Vec<Chunk>> = Mutex::new(vec![]);
 }
 
+// keep track of latest adress (obsolet bc of pc)
 static mut LATEST_ADDRESS: u16 = 0;
 
+
+// def chunk
 #[derive(Copy, Clone, Debug)]
 pub struct Chunk {
     pub start: u16,
@@ -25,6 +30,33 @@ impl Chunk {
         }
     }
 }
+
+// config getters and setters:
+
+pub fn get_chunk_size() -> u16{CHUNK_SIZE} // not changable
+
+
+
+
+
+// ls :
+pub fn get_unique_filenames() -> Vec<String> {
+    let hashmap = HASHMAP.lock().unwrap();
+    let mut filenames: Vec<String> = hashmap.keys().cloned().collect();
+    filenames.sort(); // Optional: sort the filenames
+    filenames.dedup(); // Remove duplicates, if any
+    filenames
+}
+
+// Function to print all unique filenames
+pub fn print_unique_filenames(filenames:Vec<String>) {
+    let mut counter = 0;
+    for filename in filenames {
+        counter = counter +1;
+        println!("({counter})- {}", filename);
+    }
+}
+
 
 pub fn get_latest_addr() -> u16 {
     unsafe { LATEST_ADDRESS }
