@@ -1,10 +1,10 @@
-use crate::{vm, Machine};
+use crate:: Machines;
 
 
 pub fn store_text<'a>(mach:&'a mut Machine, text: &'a str, start_address: usize) -> Result<usize, &'a str> {
     let bytes = text.as_bytes();
 
-    if start_address + bytes.len() > vm::Machine::get_mem_size() {
+    if start_address + bytes.len() >mach.get_mem_size() {
         return Err("Not enough memory to store text.");
     }
 

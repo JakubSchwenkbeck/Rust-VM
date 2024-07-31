@@ -1,5 +1,5 @@
 
-    use std::{io::{self, Write}, path::Display, process::Command};
+    use std::{io::{self, Write}, process::Command};
 
     use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::memory_manager::{get_chunk_size, get_file_size, get_unique_filenames, load_program, mem_alloc, mem_release, print_unique_filenames, run_program}, Machine};
 
@@ -31,18 +31,10 @@
             
             match input {
                 "help" => {
-                    println!("Available commands:");
-                    println!("help - Show this help message");
-                    println!("exit - Exit the CLI");
-                    println!("clear / cls - clears Terminal");
-                    println!("parse <Filename> - trying to parse the file");
-                    println!("exec <Filename> - trying to execute the file");
-                    println!("instr <Assembler instruction> - executes the single Assembler line");
-                    println!("malloc <Filename> - allocating memory space for file");
-                    println!("printmem <lenght> - prints first length memory spaces");
-                    println!("show config - displays current configurations");
-                    println!("set config - lets the user change system configurations");
-                    println!("ls - lists all loaded programms/data")
+                    print_help();
+
+
+                  
                 } 
                 _ if input.starts_with("parse ") => {
                     let filename = input.strip_prefix("parse ").unwrap();
@@ -64,16 +56,8 @@
                         println!("Execution was not successfull : {p:?}");
                     }
                 }
-                _ if input.starts_with("clear") => {
-                    Command::new("cmd")
-                    .args(&["/C", "cls"])
-                    .status()
-                    .unwrap();
-                    println!("-16 Bit Virtual Machine in Rust-");
-                    println!(" ");
-        
-                }
-                _ if input.starts_with("cls") => {
+               
+                _ if input.starts_with("cls") ||input.starts_with("clear")||input.starts_with("clc")  => {
                     Command::new("cmd")
                     .args(&["/C", "cls"])
                     .status()
@@ -109,10 +93,14 @@
                 _ if input.starts_with("show config")=>{
 
                         let chunkconfig = get_chunk_size();
+                        let memsize = mach.get_mem_size();
+                        let regnum = mach.registers.len();
 
                   println!("Configs:");
                   println!("-System : 16 Bit");
+                  println!("-Memory size : {memsize}b");
                   println!("--Chunk size (immutable) : {chunkconfig}");
+                  println!("-Number of Registers: {regnum}")
 
                 }
                 _ if input.starts_with("ls")=>{ 
@@ -133,4 +121,25 @@
     
         println!("Goodbye!");
     }
+
+
+
     
+    pub fn print_help(){
+        println!("Available commands:");
+        println!("help - Show this help message");
+        println!("exit - Exit the CLI");
+        println!("clear / cls - clears Terminal");
+        println!("ls - lists all loaded programms/data");
+        println!("");
+        println!("parse <Filename> - trying to parse the file");
+        println!("exec <Filename> - trying to execute the file");
+        println!("malloc <Filename> - allocating memory space for file");
+        println!("instr <Assembler instruction> - executes the single Assembler line");
+        println!("");
+        println!("printmem <length> - prints first length memory spaces");
+        println!("show config - displays current configurations");
+        println!("set config - lets the user change system configurations");
+       
+
+    }

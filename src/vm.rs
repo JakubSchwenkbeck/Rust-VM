@@ -102,7 +102,7 @@ impl Machine{ // creates a machine
         }
     }   
 
-    pub fn get_mem_size() -> usize{
+    pub fn get_mem_size(&mut self) -> usize{
         MEM_SIZE as usize
     }
 
