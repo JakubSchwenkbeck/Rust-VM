@@ -1,4 +1,4 @@
-use crate:: Machines;
+use crate:: Machine;
 
 
 pub fn store_text<'a>(mach:&'a mut Machine, text: &'a str, start_address: usize) -> Result<usize, &'a str> {

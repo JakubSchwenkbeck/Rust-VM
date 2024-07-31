@@ -50,7 +50,7 @@ pub fn get_unique_filenames() -> Vec<String> {
 
 // Function to print all unique filenames
 pub fn print_unique_filenames(filenames:Vec<String>) {
-    let mut counter = 0;
+    let mut counter = 1;
     for filename in filenames {
         counter = counter +1;
         println!("({counter})- {}", filename);

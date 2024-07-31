@@ -107,6 +107,7 @@
 
                     let filenames = get_unique_filenames();
                     println!("Listing of all programs and data in memory:");
+                    println!("(1) - Operating System");
                     print_unique_filenames(filenames);
 
 
@@ -127,14 +128,15 @@
     
     pub fn print_help(){
         println!("Available commands:");
+        println!("");
         println!("help - Show this help message");
         println!("exit - Exit the CLI");
         println!("clear / cls - clears Terminal");
         println!("ls - lists all loaded programms/data");
         println!("");
+        println!("malloc <Filename> - allocating memory space for file");
         println!("parse <Filename> - trying to parse the file");
         println!("exec <Filename> - trying to execute the file");
-        println!("malloc <Filename> - allocating memory space for file");
         println!("instr <Assembler instruction> - executes the single Assembler line");
         println!("");
         println!("printmem <length> - prints first length memory spaces");
