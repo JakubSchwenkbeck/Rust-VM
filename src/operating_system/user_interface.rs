@@ -42,9 +42,9 @@
                     
                     let p =load_program(mach, filename);
                     if p{
-                        println!("Succesfully parsed {filename}");
+                        println!("Succesfully loaded {filename}");
                     }else {
-                        println!("Parsing was not successfull : {p:?}");
+                        println!("Loading was not successfull : {p:?}");
                     }
                     
 
@@ -73,8 +73,8 @@
                     
 
                 }
-                _ if input.starts_with("parse ") => {
-                    let filename = input.strip_prefix("parse ").unwrap();
+                _ if input.starts_with("vm parse ") => {
+                    let filename = input.strip_prefix("vm parse ").unwrap();
                     let p =load_program(mach, filename);
                     if p{
                         println!("Succesfully parsed {filename}");
@@ -84,8 +84,8 @@
                     
 
                 }
-                _ if input.starts_with("exec ") => {
-                    let filename = input.strip_prefix("exec ").unwrap();
+                _ if input.starts_with("vm exec ") => {
+                    let filename = input.strip_prefix("vm exec ").unwrap();
                     let p =  run_program(mach,filename,true);
                     if p.is_ok(){
                         println!("Succesfully executed {filename}");
@@ -103,10 +103,10 @@
                 println!(" ");
         
                 }
-                _ if input.starts_with("instr ") => {
-                    let filename = input.strip_prefix("instr ").unwrap();
+                _ if input.starts_with("vm instr ") => {
+                    let filename = input.strip_prefix("vm instr ").unwrap();
                    
-                   let word = parse_line(filename,mach);
+                   let word = parse_line(filename,mach,true);
                       decode(word, mach, 0,true);
                     reg_printall(mach);
         
@@ -119,12 +119,12 @@
                         print!("Memory {i} = {val}  ");
                    }
                 }
-                _ if input.starts_with("malloc ") => {
-                    let filename = input.strip_prefix("malloc ").unwrap();
+                _ if input.starts_with("vm malloc ") => {
+                    let filename = input.strip_prefix("vm malloc ").unwrap();
                     mem_alloc(filename,get_file_size(filename));
                 }
-                _ if input.starts_with("release ") => {
-                    let filename = input.strip_prefix("release ").unwrap();
+                _ if input.starts_with("vm release ") => {
+                    let filename = input.strip_prefix("vm release ").unwrap();
                     mem_release(filename);
                 }
                 _ if input.starts_with("show config")=>{
@@ -136,7 +136,7 @@
                   println!("Configs:");
                   println!("-System : 16 Bit");
                   println!("-Memory size : {memsize}b");
-                  println!("--Chunk size (immutable) : {chunkconfig}");
+                  println!("--Chunk size : {chunkconfig}b");
                   println!("-Number of Registers: {regnum}")
 
                 }
@@ -164,25 +164,33 @@
 
     
     pub fn print_help(){
-        println!("Available commands:");
         println!("");
-        println!("help - Show this help message");
-        println!("exit - Exit the CLI");
-        println!("clear / cls - clears Terminal");
-        println!("ls - lists all loaded programms/data");
-        println!("");
-        println!("vm load <Filename> - loads file from host src folder");
-        println!("  - malloc <Filename> - allocating memory space for file");
-        println!("  - parse <Filename> - trying to parse the file");
-        println!("vm run <Filename> - runs program from memory");
-        println!("vm run -disp <Filename> - runs program from memory and displays states");
-        println!("  - exec <Filename> - trying to execute the file");
-        println!("");
-        println!("instr <Assembler instruction> - executes the single Assembler line");
-        println!("");
-        println!("printmem <length> - prints first length memory spaces");
-        println!("show config - displays current configurations");
-        println!("set config - lets the user change system configurations");
-       
+        println!("Commands:\n");
+
+        println!("General:");
+        println!("  help                  Display this help message");
+        println!("  exit                  Exit the CLI");
+        println!("  clear, cls , clc      Clear the terminal screen");
+        println!("  ls                    List all loaded programs/data\n");
+        
+        println!("Virtual Machine:");
+        println!("  vm load <file>        Load file from host src folder (malloc and parse)");
+        println!("    - malloc <file>     Allocate memory space for file");
+        println!("    - parse <file>      Parse the file");
+        println!("  vm release <file>     Release the Memory used by file");
+        println!("  vm run <file>         Run program from memory");
+        println!("  vm run -disp <file>   Run program from memory and display states");
+        println!("    - exec <file>       Execute the file\n");
+        
+        println!("Assembler:");
+        println!("  instr <instruction>   Execute a single assembler instruction\n");
+        
+        println!("Memory:");
+        println!("  printmem <length>     Print first <length> memory spaces\n");
+        
+        println!("Configuration:");
+        println!("  show config           Display current configurations");
+        println!("  set config            Change system configurations");
+        
 
     }

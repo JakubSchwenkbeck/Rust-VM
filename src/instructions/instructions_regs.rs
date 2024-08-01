@@ -42,9 +42,11 @@ use crate::vm::Machine;
 //* Util */
 pub fn reg_single_print(mach: &mut Machine, dest: U4){
         let v = mach.registers[dest];
+        println!("");
         println!("Final Value in Output-Reg : {v}");
         let binstring =format!("{:b}", v);
         println!("As binary: {binstring}");
+        println!("");
     
 }
 use crate::vm::EnumIter;
@@ -92,7 +94,7 @@ pub fn reg_printall(mach: &mut Machine){
                 let val2 = mach.registers[source2];
                 let sum = val1 +val2;
                 mach.registers[dest] = sum;
-                println!("Im Writing {sum} into reg at {dest}");
+               // println!("Im Writing {sum} into reg at {dest}");
 
                 
             }
@@ -105,7 +107,7 @@ pub fn reg_printall(mach: &mut Machine){
                 }
                 
                 mach.registers[dest] = sum;
-                println!("Im Writing {sum} into reg at {dest}");
+               // println!("Im Writing {sum} into reg at {dest}");
 
             }
             pub fn reg_and( mach :&mut Machine ,dest: U4,source1 : U4,source2 : U4){
@@ -127,7 +129,7 @@ pub fn reg_printall(mach: &mut Machine){
                 if mach.registers[comp1] != mach.registers[comp2]{
                         reg_jump(mach, (current +dest.0 as u16 )as u8 , U4::new(0));
                         let d = (current + dest.0 as u16 )as u8;
-                        println!("Im branching to {d}");
+                     //   println!("Im branching to {d}");
                         mach.registers[13] = d as u16;
                 }
 

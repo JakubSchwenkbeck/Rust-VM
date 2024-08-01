@@ -192,7 +192,7 @@ fn read_program_data(mach: &mut Machine, filename: &str) -> Vec<u16> {
 
     let mut res: Vec<u16>= Vec::new(); 
     for line in lines{
-        res.push(parse_line(&line,   mach))
+        res.push(parse_line(&line,   mach,false))
     
     }
     res
@@ -210,7 +210,7 @@ pub fn run_program(virtualm: &mut Machine, filename: &str,dispflag: bool) -> Res
  let start = chunks[0].start;
  let end = chunks.last().unwrap().end;
 
- println!("Start {start}, End {end}");
+if dispflag{ println!("Start {start}, End {end}");}
 
  // Set the initial program counter (PC) to the start address
  virtualm.registers[13] = start;
