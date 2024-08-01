@@ -69,7 +69,7 @@ pub fn print_unique_filenames(filenames:Vec<String>) {
     let mut counter = 1;
     for filename in filenames {
         counter = counter +1;
-        println!("({counter})- {}", filename);
+        println!("({counter}) - {}", filename);
     }
 }
 
