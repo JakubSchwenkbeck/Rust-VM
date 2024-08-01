@@ -1,7 +1,7 @@
 
     use std::{io::{self, Write}, process::Command};
 
-    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::{file_manager::{create_file, store_text, write_file}, memory_manager::{get_chunk_size, get_file_size, get_unique_filenames, load_program, mem_alloc, mem_release, print_unique_filenames, run_program}}, Machine};
+    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::{file_manager::{create_file, display_file, write_file}, memory_manager::{get_chunk_size, get_file_size, get_unique_filenames, load_program, mem_alloc, mem_release, print_unique_filenames, run_program}}, Machine};
 
     pub fn cmd_line_interface(mach : &mut Machine) {
         
@@ -32,6 +32,12 @@
             match input {
                 "help" => {
                     print_help();
+
+
+                  
+                } 
+                "vm help" => {
+                    print_vm_help();
 
 
                   
@@ -104,19 +110,22 @@
                 _ if input.starts_with("vm write ") => {
                     let filename = input.strip_prefix("vm write ").unwrap();
                     println!("\n You are now in the editor:                         currently opened : {filename} ");
+                    let mut start = 0;
                     loop{
                         io::stdout().flush().unwrap(); // Make sure the prompt is displayed
     
                         let mut input = String::new();
                         io::stdin().read_line(&mut input).expect("Failed to read line");
                         
-                        let input = input.trim(); // Remove trailing newline
-                        if input == "exit" {
+                        let input_trim = input.trim(); // Remove trailing newline
+                        if input_trim == "exit" {
                             break;
                         }
+                         //input = format!("{}\n", input_trim);
                         
-                        write_file(mach, input, filename);
-
+                    let last=  write_file(mach,&input, filename,start);
+                        
+                         start = last;
                     }
                 
                     
@@ -157,6 +166,11 @@
                 _ if input.starts_with("vm release ") => {
                     let filename = input.strip_prefix("vm release ").unwrap();
                     mem_release(filename);
+                }
+                _ if input.starts_with("vm display ")=>{ 
+                    let filename = input.strip_prefix("vm display ").unwrap();
+                    display_file(mach,filename);
+
                 }
                 _ if input.starts_with("show config")=>{
 
@@ -204,15 +218,16 @@
         println!("  clear, cls , clc      Clear the terminal screen");
         println!("  ls                    List all loaded programs/data\n");
         
-        println!("Virtual Machine:");
+        println!("Virtual Machine:        More information with 'vm help'\n");
+        println!("-Programms :");
         println!("  vm load <file>        Load file from host src folder (malloc and parse)");
-        println!("    - malloc <file>     Allocate memory space for file");
-        println!("    - parse <file>      Parse the file");
         println!("  vm release <file>     Release the Memory used by file");
         println!("  vm run <file>         Run program from memory");
-        println!("  vm run -disp <file>   Run program from memory and display states");
-        println!("    - exec <file>       Execute the file\n");
-        
+        println!("-Files : ");
+        println!("  vm create <file>      Creates new file (default : .txt) in the VM");
+        println!("  vm write <file>       Opens the vm-editor with the file ");
+
+        println!("");
         println!("Assembler:");
         println!("  instr <instruction>   Execute a single assembler instruction\n");
         
@@ -223,5 +238,20 @@
         println!("  show config           Display current configurations");
         println!("  set config            Change system configurations");
         
+
+    }
+
+    fn print_vm_help(){
+        println!("Virtual Machine:       \n");
+        println!("  vm load <file>        Load file from host src folder (malloc and parse)");
+        println!("    - malloc <file>     Allocate memory space for file");
+        println!("    - parse <file>      Parse the file");
+        println!("  vm release <file>     Release the Memory used by file");
+        println!("  vm run <file>         Run program from memory");
+        println!("  vm run -disp <file>   Run program from memory and display states");
+        println!("    - exec <file>       Execute the file\n");
+        println!("  vm create <file>      Creates new file (default : .txt) in the VM");
+        println!("  vm write <file>       Opens the vm-editor with the file ");
+
 
     }
