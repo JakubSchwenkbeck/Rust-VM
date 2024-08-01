@@ -1,5 +1,15 @@
 use crate:: Machine;
 
+use super::memory_manager::{get_latest_addr, mem_alloc};
+
+
+/* Magic Numbers for file types:
+ -00001111 is .txt
+ 
+  */
+
+
+
 
 pub fn store_text<'a>(mach:&'a mut Machine, text: &'a str, start_address: usize) -> Result<usize, &'a str> {
     let bytes = text.as_bytes();
@@ -23,29 +33,42 @@ pub fn read_text(mach:&mut Machine, start_address: usize, length: usize) -> Stri
     String::from_utf8_lossy(&text).to_string()
 }
 
+const DEFAULT_ALLOC_SIZE: i32 = 256; // 128?
 
-
-pub fn create_file(_filename: &str,ending: &str){
+pub fn create_file(mach:&mut Machine,filename: &str,ending: &str){
 
 if ending == ".txt"{
     // allocate memory:
-
-
+    let start = mem_alloc(filename, DEFAULT_ALLOC_SIZE as u16);
+    
     // create head:
+    mach.memory.write(start, 0b00001111);
 
 
     // encode each char into u8
 
 
     // create tail
-
+    let tail = get_latest_addr();
+    mach.memory.write(tail, 0b0000000);
 
 
 }
 
+ println!("\n Successfully created {filename} \n");
+
+}
+pub fn write_file(mach:&mut Machine,input : &str, filename: &str){
+
+    let chars: Vec<char> = input.chars().collect();
+    for c in chars{
+
+        fill_file(mach,c,0);
+    }
+
 }
 
-pub fn fill_file(ch: char)
+pub fn fill_file(mach:&mut Machine,ch: char,adress: u16)
 {
    
 
@@ -54,6 +77,8 @@ if ch.is_ascii() {
     // Convert the character to a u8
     let encoded: u8 = ch as u8;
     println!("Encoded value of '{}' is {}", ch, encoded);
+    mach.memory.write(adress, encoded);
+    
 } else {
     println!("Character '{}' is not in the ASCII range", ch);
 }

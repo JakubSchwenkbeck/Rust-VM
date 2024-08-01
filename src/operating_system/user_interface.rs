@@ -1,7 +1,7 @@
 
     use std::{io::{self, Write}, process::Command};
 
-    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::memory_manager::{get_chunk_size, get_file_size, get_unique_filenames, load_program, mem_alloc, mem_release, print_unique_filenames, run_program}, Machine};
+    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::{file_manager::{create_file, store_text, write_file}, memory_manager::{get_chunk_size, get_file_size, get_unique_filenames, load_program, mem_alloc, mem_release, print_unique_filenames, run_program}}, Machine};
 
     pub fn cmd_line_interface(mach : &mut Machine) {
         
@@ -93,7 +93,38 @@
                         println!("Execution was not successfull : {p:?}");
                     }
                 }
-               
+
+                    // DEFAULT .txt
+                _ if input.starts_with("vm create ") => {
+                    let filename = input.strip_prefix("vm create ").unwrap();
+                    create_file(mach, filename, ".txt");
+                    
+                }
+
+                _ if input.starts_with("vm write ") => {
+                    let filename = input.strip_prefix("vm write ").unwrap();
+                    println!("\n You are now in the editor:                         currently opened : {filename} ");
+                    loop{
+                        io::stdout().flush().unwrap(); // Make sure the prompt is displayed
+    
+                        let mut input = String::new();
+                        io::stdin().read_line(&mut input).expect("Failed to read line");
+                        
+                        let input = input.trim(); // Remove trailing newline
+                        if input == "exit" {
+                            break;
+                        }
+                        
+                        write_file(mach, input, filename);
+
+                    }
+                
+                    
+                }
+
+
+
+
                 _ if input.starts_with("cls") ||input.starts_with("clear")||input.starts_with("clc")  => {
                     Command::new("cmd")
                     .args(&["/C", "cls"])
