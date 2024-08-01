@@ -36,6 +36,43 @@
 
                   
                 } 
+                _ if input.starts_with("vm load ") => {
+                    let filename = input.strip_prefix("vm load ").unwrap();
+                    mem_alloc(filename,get_file_size(filename));
+                    
+                    let p =load_program(mach, filename);
+                    if p{
+                        println!("Succesfully parsed {filename}");
+                    }else {
+                        println!("Parsing was not successfull : {p:?}");
+                    }
+                    
+
+                }
+                _ if input.starts_with("vm run ") => {
+                    let remaining_input = input.strip_prefix("vm run ").unwrap();
+                    let mut filename: &str;
+                    let mut dispflag :bool;
+                    if remaining_input.starts_with("-disp ") {
+
+                         filename = remaining_input.strip_prefix("-disp ").unwrap();
+
+                         dispflag = true;
+
+                    } else {
+                         filename = remaining_input;
+                         dispflag = false;
+                    }
+                    let p = run_program(mach, filename,dispflag);
+
+                    if p.is_ok(){
+                        println!("Succesfully executed {filename}");
+                    }else {
+                        println!("Execution was not successfull : {p:?}");
+                    }
+                    
+
+                }
                 _ if input.starts_with("parse ") => {
                     let filename = input.strip_prefix("parse ").unwrap();
                     let p =load_program(mach, filename);
@@ -49,7 +86,7 @@
                 }
                 _ if input.starts_with("exec ") => {
                     let filename = input.strip_prefix("exec ").unwrap();
-                    let p =  run_program(mach,filename);
+                    let p =  run_program(mach,filename,true);
                     if p.is_ok(){
                         println!("Succesfully executed {filename}");
                     }else {
@@ -134,9 +171,13 @@
         println!("clear / cls - clears Terminal");
         println!("ls - lists all loaded programms/data");
         println!("");
-        println!("malloc <Filename> - allocating memory space for file");
-        println!("parse <Filename> - trying to parse the file");
-        println!("exec <Filename> - trying to execute the file");
+        println!("vm load <Filename> - loads file from host src folder");
+        println!("  - malloc <Filename> - allocating memory space for file");
+        println!("  - parse <Filename> - trying to parse the file");
+        println!("vm run <Filename> - runs program from memory");
+        println!("vm run -disp <Filename> - runs program from memory and displays states");
+        println!("  - exec <Filename> - trying to execute the file");
+        println!("");
         println!("instr <Assembler instruction> - executes the single Assembler line");
         println!("");
         println!("printmem <length> - prints first length memory spaces");

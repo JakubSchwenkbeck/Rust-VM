@@ -197,7 +197,7 @@ fn read_program_data(mach: &mut Machine, filename: &str) -> Vec<u16> {
     }
     res
 }
-pub fn run_program(virtualm: &mut Machine, filename: &str) -> Result<(), &'static str> {
+pub fn run_program(virtualm: &mut Machine, filename: &str,dispflag: bool) -> Result<(), &'static str> {
     // Load the program into the virtual machine memory
   
     // Reset the virtual machine's registers except the program counter (PC)
@@ -219,13 +219,13 @@ pub fn run_program(virtualm: &mut Machine, filename: &str) -> Result<(), &'stati
  while let Some(l) = virtualm.memory.read2(virtualm.registers[13]) {
      // Decode and execute the instruction
      decode(l, virtualm, start);
-
+    if dispflag{
      // Print current state for debugging
      let current_pc = virtualm.registers[13];
      println!("current: {current_pc}");
      println!("{l}");
      reg_printall(virtualm);
-
+    }
      // Advance the program counter (PC) by 2 (since each instruction is 2 bytes)
      virtualm.registers[13] += 2;
 
