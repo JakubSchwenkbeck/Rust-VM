@@ -1,6 +1,6 @@
 use crate:: Machine;
 
-use super::memory_manager::{get_latest_addr, mem_alloc};
+use super::memory_manager::{get_all_addresses, get_latest_addr, mem_alloc};
 
 
 /* Magic Numbers for file types:
@@ -58,13 +58,24 @@ if ending == ".txt"{
  println!("\n Successfully created {filename} \n");
 
 }
-pub fn write_file(mach:&mut Machine,input : &str, filename: &str){
+pub fn write_file(mach:&mut Machine,input : &str, filename: &str,start : u16)->u16{
 
     let chars: Vec<char> = input.chars().collect();
+    let addresses = get_all_addresses(filename);
+    let mut index = start;
     for c in chars{
+        
+    
+        match addresses.get(index as usize) {
+            Some(&address) =>  {
+                fill_file(mach,c,address);
+                index += 1},
 
-        fill_file(mach,c,0);
+            None => println!("Out of Bounds!!"),
+        }
+    
     }
+    index
 
 }
 
@@ -83,5 +94,19 @@ if ch.is_ascii() {
     println!("Character '{}' is not in the ASCII range", ch);
 }
     
+
+}
+
+
+pub fn display_file(mach:& mut Machine,filename: &str){
+let addresses = get_all_addresses(filename);
+println!("You openend {filename} : \n");
+for adr in addresses{
+    let c = mach.memory.read(adr).unwrap() as char;
+    print!("{c}");
+
+}
+print!(" \n");
+
 
 }
