@@ -51,8 +51,8 @@
                 }
                 _ if input.starts_with("vm run ") => {
                     let remaining_input = input.strip_prefix("vm run ").unwrap();
-                    let mut filename: &str;
-                    let mut dispflag :bool;
+                    let  filename: &str;
+                    let  dispflag :bool;
                     if remaining_input.starts_with("-disp ") {
 
                          filename = remaining_input.strip_prefix("-disp ").unwrap();
@@ -107,7 +107,7 @@
                     let filename = input.strip_prefix("instr ").unwrap();
                    
                    let word = parse_line(filename,mach);
-                      decode(word, mach, 0);
+                      decode(word, mach, 0,true);
                     reg_printall(mach);
         
                 }

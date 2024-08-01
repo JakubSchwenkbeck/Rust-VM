@@ -6,7 +6,7 @@ use crate::{instructions::*, u4::U4, Machine};
 // DECODE ON BINARY LEVEL
 
 
-pub fn decode(word: u16,mach : &mut Machine,current : u16)  {
+pub fn decode(word: u16,mach : &mut Machine,current : u16,dispflag:bool)  {
     let opcode = (word >> 12) as u8 ;  // Extract the opcode (first 4 bits)
     if word!= 32727{
         
@@ -19,10 +19,10 @@ pub fn decode(word: u16,mach : &mut Machine,current : u16)  {
             let rd = ((word >> 8) & 0xF) as u8;       // Extract the destination register (next 4 bits)
             let val = (word & 0xFF) as u8;
 
-
+                if dispflag{
                 println!("decoding : rd {rd}");
                 println!("value to write : {val}"); 
-
+                }
           reg_immediate_load_word(mach,U4::new(rd),val);
         },
         0b0001 => { // SWI
@@ -91,7 +91,9 @@ pub fn decode(word: u16,mach : &mut Machine,current : u16)  {
             let rd = U4::new(((word >> 8) & 0xF) as u8);
             let rs = U4::new(((word >> 4) & 0xF) as u8);
             let rt = U4::new((word & 0xF) as u8);
+            if dispflag{
             println!("Im Decoding ADD {rd},{rs},{rt}");
+            }
             reg_add(mach, rd, rs, rt);
            
         },
@@ -99,7 +101,9 @@ pub fn decode(word: u16,mach : &mut Machine,current : u16)  {
             let rd = U4::new(((word >> 8) & 0xF) as u8);
             let rs = U4::new(((word >> 4) & 0xF) as u8);
             let rt = U4::new((word & 0xF) as u8);
+            if dispflag{
             println!("Im Decoding Sub {rd},{rs},{rt}");
+            }
             reg_sub(mach, rd, rs, rt);
            
         },

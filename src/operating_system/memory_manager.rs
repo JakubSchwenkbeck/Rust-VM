@@ -218,7 +218,7 @@ pub fn run_program(virtualm: &mut Machine, filename: &str,dispflag: bool) -> Res
  // Main execution loop
  while let Some(l) = virtualm.memory.read2(virtualm.registers[13]) {
      // Decode and execute the instruction
-     decode(l, virtualm, start);
+     decode(l, virtualm, start,dispflag);
     if dispflag{
      // Print current state for debugging
      let current_pc = virtualm.registers[13];
