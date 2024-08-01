@@ -37,6 +37,22 @@ pub fn get_chunk_size() -> u16{CHUNK_SIZE} // not changable
 
 
 
+pub fn get_all_addresses(filename: &str) -> Vec<u16> {
+    let map = HASHMAP.lock().unwrap();
+    
+    if let Some(chunks) = map.get(filename) {
+        let mut addresses = Vec::new();
+        for chunk in chunks {
+            for addr in chunk.start..=chunk.end {
+                addresses.push(addr);
+            }
+        }
+        addresses
+    } else {
+        println!("No memory allocated for this file");
+        Vec::new() // Return an empty vector if the filename is not found
+    }
+}
 
 
 // ls :
@@ -62,13 +78,15 @@ pub fn get_latest_addr() -> u16 {
     unsafe { LATEST_ADDRESS }
 }
 
-pub fn mem_alloc(filename: &str, size: u16) -> bool {
+pub fn mem_alloc(filename: &str, size: u16) -> u16 {
+
+    let res = unsafe { LATEST_ADDRESS };
     let mut map = HASHMAP.lock().unwrap();
     let mut free_list = FREE_LIST.lock().unwrap();
 
     if map.contains_key(filename) {
         println!("This file already allocated memory space");
-        return false;
+        return res;
     }
 
     let mut chunks: Vec<Chunk> = vec![];
@@ -87,7 +105,7 @@ pub fn mem_alloc(filename: &str, size: u16) -> bool {
     }
 
     map.insert(filename.to_owned(), chunks);
-    true
+    res
 }
 
 pub fn mem_release(filename: &str) {
