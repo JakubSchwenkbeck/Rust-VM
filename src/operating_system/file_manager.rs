@@ -5,6 +5,10 @@ use super::memory_manager::{get_all_addresses, get_latest_addr, mem_alloc};
 
 /* Magic Numbers for file types:
  -00001111 is .txt
+
+    other files:
+ -11110000 .asm
+           .raw
  
   */
 
