@@ -175,7 +175,10 @@ pub fn load_program(mach: &mut Machine, filename: &str) -> bool {
     if let Some(chunks) = map.get(filename) {
         // Read all the program data at once
         let program_data = read_program_data(mach, filename);
-        
+        if program_data.is_empty(){
+            return  false;
+        }
+
         let mut addr = chunks[0].start;
         let mut data_index = 0; // Index for accessing program_data
 
@@ -206,13 +209,14 @@ pub fn load_program(mach: &mut Machine, filename: &str) -> bool {
 
 
 fn read_program_data(mach: &mut Machine, filename: &str) -> Vec<u16> {
-    let lines =read_lines_from_file(&filename).unwrap();
-
+    let lines =read_lines_from_file(&filename);
     let mut res: Vec<u16>= Vec::new(); 
-    for line in lines{
+    if lines.is_ok(){
+    for line in lines.unwrap(){
         res.push(parse_line(&line,   mach,false))
     
-    }
+    }}
+
     res
 }
 pub fn run_program(virtualm: &mut Machine, filename: &str,dispflag: bool) -> Result<(), &'static str> {

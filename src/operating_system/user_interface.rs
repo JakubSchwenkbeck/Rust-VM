@@ -50,7 +50,7 @@
                     if p{
                         println!("Succesfully loaded {filename}");
                     }else {
-                        println!("Loading was not successfull : {p:?}");
+                        println!("Loading was not successfull. Status is : {p:?}");
                     }
                     
 
