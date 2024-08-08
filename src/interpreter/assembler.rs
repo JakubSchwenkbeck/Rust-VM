@@ -16,13 +16,22 @@ pub fn concatenate_4bit_values(a: u8, b: u8, c: u8, d: u8) -> u16 {
     let result = ((a as u16) << 12) | ((b as u16) << 8) | ((c as u16) << 4) | (d as u16);
     result
 }
+use std::env;
 pub fn read_lines_from_file(filename: &str) -> io::Result<Vec<String>> {
-    let file = File::open(filename)?;
-    let reader = BufReader::new(file);
+    let current_dir = env::current_dir()?;
+    println!("Current working directory: {:?}", current_dir);
+    //let file_path = format!("src/{}", filename);
+
+
+    let file = File::open(filename);
+   
+    let reader = BufReader::new(file?);
 
     let mut lines = Vec::new();
+    
     for line in reader.lines() {
         let line = line?; // Handle potential I/O errors
+        
         lines.push(line);
     }
     Ok(lines)
