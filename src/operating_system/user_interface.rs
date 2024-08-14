@@ -204,8 +204,9 @@
         println!("  vm run <file>         Run program from memory");
         println!("-Files : ");
         println!("  vm create <file>      Creates new file (default : .txt) in the VM");
-        println!("  vm write <file>       Opens the vm-editor with the file ");
+        println!("  vm edit <file>        Opens the vm-editor with the file ");
         println!("  vm display <file>     Displays the file ");
+
 
         println!("");
         println!("Assembler:");
@@ -231,7 +232,7 @@
         println!("  vm run -disp <file>   Run program from memory and display states");
         println!("    - exec <file>       Execute the file\n");
         println!("  vm create <file>      Creates new file (default : .txt) in the VM");
-        println!("  vm write <file>       Opens the vm-editor with the file ");
+        println!("  vm edit <file>        Opens the vm-editor with the file ");
 
 
     }
