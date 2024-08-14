@@ -15,6 +15,7 @@ pub mod operating_system{
     pub mod user_interface;
     pub mod memory_manager;
     pub mod file_manager;
+    pub mod editor;
     
 }
 
