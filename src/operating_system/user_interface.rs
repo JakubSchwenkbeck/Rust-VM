@@ -1,7 +1,7 @@
 
     use std::{io::{self, Write}, process::Command};
 
-    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::{file_manager::{create_file, display_file, write_file}, memory_manager::{get_chunk_size, get_file_size, get_unique_filenames, load_program, mem_alloc, mem_release, print_unique_filenames, run_program}}, Machine};
+    use crate::{instructions::instructions_regs::reg_printall, interpreter::{assembler::parse_line, decoder::decode}, operating_system::{editor::open_editor, file_manager::{create_file, display_file, write_file}, memory_manager::{get_chunk_size, get_file_size, get_unique_filenames, load_program, mem_alloc, mem_release, print_unique_filenames, run_program}}, Machine};
 
     pub fn cmd_line_interface(mach : &mut Machine) {
         
@@ -107,32 +107,6 @@
                     
                 }
 
-                _ if input.starts_with("vm write ") => {
-                    let filename = input.strip_prefix("vm write ").unwrap();
-                    println!("\n You are now in the editor:                         currently opened : {filename} ");
-                    let mut start = 0;
-                    loop{
-                        io::stdout().flush().unwrap(); // Make sure the prompt is displayed
-    
-                        let mut input = String::new();
-                        io::stdin().read_line(&mut input).expect("Failed to read line");
-                        
-                        let input_trim = input.trim(); // Remove trailing newline
-                        if input_trim == "exit" {
-                            break;
-                        }
-                         //input = format!("{}\n", input_trim);
-                        
-                    let last=  write_file(mach,&input, filename,start);
-                        
-                         start = last;
-                    }
-                
-                    
-                }
-
-
-
 
                 _ if input.starts_with("cls") ||input.starts_with("clear")||input.starts_with("clc")  => {
                     Command::new("cmd")
@@ -171,6 +145,11 @@
                     let filename = input.strip_prefix("vm display ").unwrap();
                     display_file(mach,filename);
 
+                }
+                _ if input.starts_with("vm edit ")=>{ 
+                    let filename = input.strip_prefix("vm edit ").unwrap();
+                    open_editor(mach,filename);
+                    
                 }
                 _ if input.starts_with("show config")=>{
 
@@ -226,28 +205,7 @@
         println!("-Files : ");
         println!("  vm create <file>      Creates new file (default : .txt) in the VM");
         println!("  vm write <file>       Opens the vm-editor with the file ");
-        println!("  vm display <file>     Displays
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-         the file ");
+        println!("  vm display <file>     Displays the file ");
 
         println!("");
         println!("Assembler:");
